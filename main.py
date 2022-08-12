@@ -13,7 +13,7 @@ LProg6 = ''
 LProg7 = ''
 divH = 2
 
-# применяем поправку на часовой пояс
+# поправка на часовой пояс
 def timeDiv(strTime):
     strTimeN = int(strTime.split('.')[0]) + divH
     if strTimeN>23 : strTimeN = strTimeN - 24
@@ -26,11 +26,17 @@ def timeDiv(strTime):
 
 
 def rtf_to_list(path_prog):
-    # перебираем файлы rtf в папке in и добавляем в список
+    # перебираем файлы rtf в папке in и составляем список файлов источников
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
         lst_rtf.append(path_prog + '\\in\\' + name_files_in)
-   
+
+
+def scan_channel():
+    # сканируем источники и формируем список каналов
+    for name_files in lst_rtf:
+        print(name_files)
+
 
 def rtf_to_prog(path_prog):
     # считываем rtf в список
@@ -111,7 +117,10 @@ def main():
     # заполняем список сканируемых файлов каналов
     rtf_to_list(path_prog)
 
-    # перебираем список файлов каналов
+    # составляем список файлов каналов
+    #scan_channel()
+
+    # считываем программы по каналам
     rtf_to_prog(path_prog)
 
     
