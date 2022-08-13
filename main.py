@@ -6,8 +6,15 @@ import pathlib
 
 lst_rtf = []
 lst_Ch = []
-lst_Pr =[]
+lst_D1 =[]
+lst_D2 =[]
+lst_D3 =[]
+lst_D4 =[]
+lst_D5 =[]
+lst_D6 =[]
+lst_D7 =[]
 divH = 2
+list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 
 LProg1 = ''
 LProg2 = ''
@@ -42,6 +49,43 @@ def rtf_to_list(path_prog):
 #         print(name_files)
 
 
+def rtf_to_Channel(path_prog):
+    # считываем rtf в список
+    
+    # сканируем файлы rtf и формируем списки каналов и программ
+    for name_files in lst_rtf:
+        # открываем файлы rtf построчно сохраняем в список
+        with open(name_files) as infile:
+            content = infile.read()
+        rtftext = rtf_to_text(content)
+        str_rtf = rtftext.splitlines()
+        
+        # обрабатываем список с программой из файла источника 
+        for str_line in str_rtf:
+            # делим строку на две части по пробелу
+            str_sub_line = str_line.rstrip().split(' ', 2)
+
+            # пропускаем пустые строки
+            if len(str_sub_line)>1:
+                str_sub_line1 = str_sub_line[0] 
+                str_sub_line2 = str_sub_line[1]
+                
+                # пропускаем прочерки
+                if str_sub_line2.find('---')<0 :         
+
+                    # выбираем название канала 
+                    if str_sub_line[0] == '':
+
+                        # пропускаем дни недели
+                        if not str_sub_line2.upper() in list_week :
+                            str_sub_lineCh = str_line.strip().split(' ')
+                            name_Ch = ''
+                            for str_ch in str_sub_lineCh:
+                                if not str_ch[0]=='!':
+                                    name_Ch = name_Ch + ' ' + str_ch
+                            if name_Ch not in lst_Ch: lst_Ch.append(name_Ch.strip())
+
+
 def rtf_to_prog(path_prog):
     # считываем rtf в список
     
@@ -57,8 +101,8 @@ def rtf_to_prog(path_prog):
         name_Day = 'ПОНЕДЕЛЬНИК'
         name_Ch = ''
         name_Pr = ''
-
-        # обрабатываем список 
+     
+        # обрабатываем список с программой из файла источника 
         for str_line in str_rtf:
             # делим строку на две части по пробелу
             str_sub_line = str_line.rstrip().split(' ', 2)
@@ -74,17 +118,17 @@ def rtf_to_prog(path_prog):
                     # выбираем название канала и дни недели
                     if str_sub_line[0] == '':
 
-                        if str_sub_line2.upper() in ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ'] :
+                        if str_sub_line2.upper() in list_week :
                             name_Day = str_sub_line2.upper()
                         else:
-                            name_Ch = str_sub_line2.split(' ', 1)[0]
-                            if name_Ch not in lst_Ch: lst_Ch.append(name_Ch)
+                            name_Ch = str_sub_line.strip()
+
                             
                     else:
                         # отделяем время программы от названия программы
                         str_sub_lineD = str_line.split(' ')
                         str_sub_time = ''
-                        # перебираем список время меняем и склеиваем в строку обратно
+                        # перебираем список времени начала программы, меняем согласно часовому поясу и склеиваем в строку обратно
                         for str_time in str_sub_lineD:
                             if str_time[:2].isdigit():
                                 str_sub_time = str_sub_time + ' ' + timeDiv(str_time) 
@@ -93,42 +137,69 @@ def rtf_to_prog(path_prog):
                         
                         # собираем список [канал, [программа]] переработать!!!
                         if str_sub_line1[0][:2].isdigit():
-                            if name_Day == 'ПОНЕДЕЛЬНИК':
-                                LProg1 = LProg1 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            elif name_Day == 'ВТОРНИК':
-                                LProg2 = LProg2 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            elif name_Day == 'СРЕДА':
-                                LProg3 = LProg3 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            elif name_Day == 'ЧЕТВЕРГ':
-                                LProg4 = LProg4 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            elif name_Day == 'ПЯТНИЦА':
-                                LProg5 = LProg5 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            elif name_Day == 'СУБЮОТА':
-                                LProg6 = LProg6 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
-                            if name_Day == 'ВОСКРЕСЕНЬЕ':
-                                LProg7 = LProg7 + name_Day +'~' + name_Ch +'~' + str_sub_time + '\n'
 
-    print(LProg1)
-    print(LProg2)
+                            if name_Day == 'ПОНЕДЕЛЬНИК':
+                                if len(lst_D1)<2:
+                                    lst_D1.append(str_sub_time.strip())
+                                else:
+                                    lst_D1[lst_Ch.index(name_Ch)].append(str_sub_time.strip())                              
+
+                            elif name_Day == 'ВТОРНИК':
+                                if len(lst_Ch)<2:
+                                    lst_D2.append(str_sub_time.strip())
+                                else:
+                                    l_tmp = []
+                                    lst_D2[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+                            elif name_Day == 'СРЕДА':
+                                if len(lst_Ch)<2:
+                                    lst_D3.append(str_sub_time.strip())
+                                else:
+                                    lst_D3[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+                            elif name_Day == 'ЧЕТВЕРГ':
+                                if len(lst_Ch)<2:
+                                    lst_D4.append(str_sub_time.strip())
+                                else:
+                                    lst_D4[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+                            elif name_Day == 'ПЯТНИЦА':
+                                if len(lst_Ch)<2:
+                                    lst_D5.append(str_sub_time.strip())
+                                else:
+                                    lst_D5[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+                            elif name_Day == 'СУБЮОТА':
+                                if len(lst_Ch)<2:
+                                    lst_D6.append(str_sub_time.strip())
+                                else:
+                                    lst_D6[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+                            if name_Day == 'ВОСКРЕСЕНЬЕ':
+                                if len(lst_Ch)<2:
+                                    lst_D7.append(str_sub_time.strip())
+                                else:
+                                    lst_D7[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+
+    print(lst_D1)
+    
 
 def main():
 
     # определяем окружение
     path_prog = os.getcwd()
-
-    # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
-    #read_divH()
     
-
     # заполняем список сканируемых файлов каналов
     rtf_to_list(path_prog)
 
-    # составляем список файлов каналов
-    #scan_channel()
+    # считываем каналы 
+    rtf_to_Channel(path_prog)
 
-    # считываем программы по каналам
+    # считываем программы 
     rtf_to_prog(path_prog)
 
+    # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
+    #read_divH()
     
     # print(lst_rtf)
 
