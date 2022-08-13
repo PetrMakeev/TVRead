@@ -83,7 +83,41 @@ def rtf_to_Channel(path_prog):
                             for str_ch in str_sub_lineCh:
                                 if not str_ch[0]=='!':
                                     name_Ch = name_Ch + ' ' + str_ch
-                            if name_Ch not in lst_Ch: lst_Ch.append(name_Ch.strip())
+                            if name_Ch.strip() not in lst_Ch: lst_Ch.append(name_Ch.strip())
+
+
+
+def fill_Day()        
+    # готовим заготовки списков программ по дням недели
+    lst_D1 = [['~']]
+    for el in lst_Ch:
+        lst_D1.append([el])
+    lst_D1.remove(['~'])
+    lst_D2 = [['~']]
+    for el in lst_Ch:
+        lst_D2.append([el])
+    lst_D2.remove(['~'])
+    lst_D3 = [['~']]
+    for el in lst_Ch:
+        lst_D3.append([el])
+    lst_D3.remove(['~'])
+    lst_D4 = [['~']]
+    for el in lst_Ch:
+        lst_D4.append([el])
+    lst_D4.remove(['~'])
+    lst_D5 = [['~']]
+    for el in lst_Ch:
+        lst_D5.append([el])
+    lst_D5.remove(['~'])
+    lst_D6 = [['~']]
+    for el in lst_Ch:
+        lst_D6.append([el])
+    lst_D6.remove(['~'])
+    lst_D7 = [['~']]
+    for el in lst_Ch:
+        lst_D7.append([el])
+    lst_D7.remove(['~'])  
+
 
 
 def rtf_to_prog(path_prog):
@@ -127,18 +161,17 @@ def rtf_to_prog(path_prog):
                                 if not str_ch[0]=='!':
                                     name_Ch = name_Ch + ' ' + str_ch
                             if name_Ch not in lst_Ch: lst_Ch.append(name_Ch.strip())
-
                             
                     else:
                         # отделяем время программы от названия программы
                         str_sub_lineD = str_line.split(' ')
-                        str_sub_time = ''
+                        name_Pr = ''
                         # перебираем список времени начала программы, меняем согласно часовому поясу и склеиваем в строку обратно
                         for str_time in str_sub_lineD:
                             if str_time[:2].isdigit():
-                                str_sub_time = str_sub_time + ' ' + timeDiv(str_time) 
+                                name_Pr = name_Pr + ' ' + timeDiv(str_time) 
                             else:
-                                str_sub_time = str_sub_time + ' ' + str_time
+                                name_Pr = name_Pr + ' ' + str_time
                         
                         # собираем список [канал, [программа]] переработать!!!
                         if str_sub_line1[0][:2].isdigit():
@@ -199,6 +232,11 @@ def main():
 
     # считываем каналы 
     rtf_to_Channel(path_prog)
+
+    # !!!!! запрос сортировки каналов
+
+    # создаем заготовки списков программ по дням
+    fill_Day()
 
     # считываем программы 
     rtf_to_prog(path_prog)
