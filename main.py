@@ -121,7 +121,12 @@ def rtf_to_prog(path_prog):
                         if str_sub_line2.upper() in list_week :
                             name_Day = str_sub_line2.upper()
                         else:
-                            name_Ch = str_sub_line.strip()
+                            str_sub_lineCh = str_line.strip().split(' ')
+                            name_Ch = ''
+                            for str_ch in str_sub_lineCh:
+                                if not str_ch[0]=='!':
+                                    name_Ch = name_Ch + ' ' + str_ch
+                            if name_Ch not in lst_Ch: lst_Ch.append(name_Ch.strip())
 
                             
                     else:
