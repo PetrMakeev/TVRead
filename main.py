@@ -85,9 +85,7 @@ def rtf_to_Channel(path_prog):
                                     name_Ch = name_Ch + ' ' + str_ch
                             if name_Ch.strip() not in lst_Ch: lst_Ch.append(name_Ch.strip())
 
-
-
-def fill_Day()        
+def fill_Day():        
     # готовим заготовки списков программ по дням недели
     lst_D1 = [['~']]
     for el in lst_Ch:
@@ -178,46 +176,46 @@ def rtf_to_prog(path_prog):
 
                             if name_Day == 'ПОНЕДЕЛЬНИК':
                                 if len(lst_D1)<2:
-                                    lst_D1.append(str_sub_time.strip())
+                                    lst_D1.append(name_Pr.strip())
                                 else:
-                                    lst_D1[lst_Ch.index(name_Ch)].append(str_sub_time.strip())                              
+                                    lst_D1[lst_Ch.index(name_Ch)].append(name_Pr.strip())                              
 
                             elif name_Day == 'ВТОРНИК':
                                 if len(lst_Ch)<2:
-                                    lst_D2.append(str_sub_time.strip())
+                                    lst_D2.append(name_Pr.strip())
                                 else:
                                     l_tmp = []
-                                    lst_D2[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D2[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
                             elif name_Day == 'СРЕДА':
                                 if len(lst_Ch)<2:
-                                    lst_D3.append(str_sub_time.strip())
+                                    lst_D3.append(name_Pr.strip())
                                 else:
-                                    lst_D3[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D3[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
                             elif name_Day == 'ЧЕТВЕРГ':
                                 if len(lst_Ch)<2:
-                                    lst_D4.append(str_sub_time.strip())
+                                    lst_D4.append(name_Pr.strip())
                                 else:
-                                    lst_D4[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D4[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
                             elif name_Day == 'ПЯТНИЦА':
                                 if len(lst_Ch)<2:
-                                    lst_D5.append(str_sub_time.strip())
+                                    lst_D5.append(name_Pr.strip())
                                 else:
-                                    lst_D5[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D5[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
                             elif name_Day == 'СУБЮОТА':
                                 if len(lst_Ch)<2:
-                                    lst_D6.append(str_sub_time.strip())
+                                    lst_D6.append(name_Pr.strip())
                                 else:
-                                    lst_D6[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D6[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
                             if name_Day == 'ВОСКРЕСЕНЬЕ':
                                 if len(lst_Ch)<2:
-                                    lst_D7.append(str_sub_time.strip())
+                                    lst_D7.append(name_Pr.strip())
                                 else:
-                                    lst_D7[lst_Ch.index(name_Ch)].append(str_sub_time.strip())
+                                    lst_D7[lst_Ch.index(name_Ch)].append(name_Pr.strip())
 
     print(lst_D1)
     
