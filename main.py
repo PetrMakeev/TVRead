@@ -22,14 +22,40 @@ def timeDiv(strTime):
 
 
 def txt_to_list(path_prog):
-    # перебираем файлы txt в папке in и составляем список файлов источников
+    # создаем список файлов источников
     global lst_txt
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
         if name_files_in[-3:]=='txt':
             lst_txt.append(path_prog + '\\in\\' + name_files_in)
     
-    lll=1    
+    # составляем словарь каналов
+    for name_files in lst_txt:
+        name_ch_files = os.path.basename(name_files)
+        name_ch = name_ch_files[:name_ch_files.index('.')]
+        lst_Ch.append([name_ch,name_ch])
+
+    # открываем сохраненный словарь каналов
+    fl_ch = True
+    try:
+        with open('Channel.txt', 'r') as file_r:
+            str_txt = file_r.readlines()
+    except:
+        fl_ch =False
+    if not fl_ch:
+        # сливаем словарь каналов в Channel.txt
+        str_ch=''
+        for el in lst_Ch:
+            str_ch += ( el[0]+ '|' + el[1] + '\n')
+        try:
+            with open('Channel.txt', 'w') as file_w:
+                file_w.writelines(str_ch)
+        except:
+            print('Файл Channel.txt заблокирован для вывода списка каналов!')            
+    
+    # выводим список на экран для проверки названий и порядка 
+
+
     
 
 
@@ -78,21 +104,21 @@ def txt_to_Channel(path_prog):
         #                     if name_Ch.strip() not in lst_Ch: lst_Ch.append(name_Ch.strip())
         
     # запрашиваем сортировку каналов
-    print('Обработаны следующие телеканалы:\n')
-    npp = 1
-    for el in lst_Ch:
-        if npp>9:
-            print('< '+ str(npp) +' > - ' + el)
-        else:
-            print('<  '+ str(npp) +' > - ' + el)
-        npp += 1
+    # print('Обработаны следующие телеканалы:\n')
+    # npp = 1
+    # for el in lst_Ch:
+    #     if npp>9:
+    #         print('< '+ str(npp) +' > - ' + el)
+    #     else:
+    #         print('<  '+ str(npp) +' > - ' + el)
+    #     npp += 1
 
-    # сливаем перечень каналов в Channel.txt
-    try:
-        with open('Channel.txt', 'w', encoding='utf-8') as file_w:
-            file_w.writelines(name_Ch)
-    except:
-        print('Файл Channel.txt заблокирован для вывода списка каналов!')
+    # # сливаем перечень каналов в Channel.txt
+    # try:
+    #     with open('Channel.txt', 'w', encoding='utf-8') as file_w:
+    #         file_w.writelines(name_Ch)
+    # except:
+    #     print('Файл Channel.txt заблокирован для вывода списка каналов!')
     
     
         
