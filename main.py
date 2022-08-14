@@ -1,28 +1,13 @@
-from operator import index
-from striprtf.striprtf import rtf_to_text
 import os
 import pathlib
 
 
-lst_rtf = []
 lst_Ch = []
-# lst_D1 =[]
-# lst_D2 =[]
-# lst_D3 =[]
-# lst_D4 =[]
-# lst_D5 =[]
-# lst_D6 =[]
-# lst_D7 =[]
+lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 
-LProg1 = ''
-LProg2 = ''
-LProg3 = ''
-LProg4 = ''
-LProg5 = ''
-LProg6 = ''
-LProg7 = ''
+
 
 # поправка на часовой пояс
 def timeDiv(strTime):
@@ -36,54 +21,83 @@ def timeDiv(strTime):
     return Rezult
 
 
-def rtf_to_list(path_prog):
-    # перебираем файлы rtf в папке in и составляем список файлов источников
+def txt_to_list(path_prog):
+    # перебираем файлы txt в папке in и составляем список файлов источников
+    global lst_txt
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
-        lst_rtf.append(path_prog + '\\in\\' + name_files_in)
-
-
-# def scan_channel():
-#     # сканируем источники и формируем список каналов
-#     for name_files in lst_rtf:
-#         print(name_files)
-
-
-def rtf_to_Channel(path_prog):
-    # считываем rtf в список
+        if name_files_in[-3:]=='txt':
+            lst_txt.append(path_prog + '\\in\\' + name_files_in)
     
-    # сканируем файлы rtf и формируем списки каналов и программ
-    for name_files in lst_rtf:
-        # открываем файлы rtf построчно сохраняем в список
-        with open(name_files) as infile:
-            content = infile.read()
-        rtftext = rtf_to_text(content)
-        str_rtf = rtftext.splitlines()
+    lll=1    
+    
+
+
+
+
+def txt_to_Channel(path_prog):
+    # считываем txt в список
+    
+    # сканируем файлы txt и формируем списки каналов и программ
+    for name_files in lst_txt:
+        # открываем файлы txt построчно сохраняем в список
+        with open(name_files, 'r') as file_r:
+            str_txt = file_r.readlines()
         
         # обрабатываем список с программой из файла источника 
-        for str_line in str_rtf:
-            # делим строку на две части по пробелу
-            str_sub_line = str_line.rstrip().split(' ', 2)
+        #for str_line in str_txt:
+            # если строка начинается с цифры то это программа, если с буквы то день недели
+        
+        
+        
+        
+        # for str_line in str_txt:
+        #     # делим строку на две части по пробелу
+        #     str_sub_line = str_line.rstrip().split(' ', 2)
 
-            # пропускаем пустые строки
-            if len(str_sub_line)>1:
-                str_sub_line1 = str_sub_line[0] 
-                str_sub_line2 = str_sub_line[1]
+
+
+        #     # пропускаем пустые строки
+        #     if len(str_sub_line)>1:
+        #         str_sub_line1 = str_sub_line[0] 
+        #         str_sub_line2 = str_sub_line[1]
                 
-                # пропускаем прочерки
-                if str_sub_line2.find('---')<0 :         
+        #         # пропускаем прочерки
+        #         if str_sub_line2.find('---')<0 :         
 
-                    # выбираем название канала 
-                    if str_sub_line[0] == '':
+        #             # выбираем название канала 
+        #             if str_sub_line[0] == '':
 
-                        # пропускаем дни недели
-                        if not str_sub_line2.upper() in list_week :
-                            str_sub_lineCh = str_line.strip().split(' ')
-                            name_Ch = ''
-                            for str_ch in str_sub_lineCh:
-                                if not str_ch[0]=='!':
-                                    name_Ch = name_Ch + ' ' + str_ch
-                            if name_Ch.strip() not in lst_Ch: lst_Ch.append(name_Ch.strip())
+        #                 # пропускаем дни недели
+        #                 if not str_sub_line2.upper() in list_week :
+        #                     str_sub_lineCh = str_line.strip().split(' ')
+        #                     name_Ch = ''
+        #                     for str_ch in str_sub_lineCh:
+        #                         if not str_ch[0]=='!':
+        #                             name_Ch = name_Ch + ' ' + str_ch
+        #                     if name_Ch.strip() not in lst_Ch: lst_Ch.append(name_Ch.strip())
+        
+    # запрашиваем сортировку каналов
+    print('Обработаны следующие телеканалы:\n')
+    npp = 1
+    for el in lst_Ch:
+        if npp>9:
+            print('< '+ str(npp) +' > - ' + el)
+        else:
+            print('<  '+ str(npp) +' > - ' + el)
+        npp += 1
+
+    # сливаем перечень каналов в Channel.txt
+    try:
+        with open('Channel.txt', 'w', encoding='utf-8') as file_w:
+            file_w.writelines(name_Ch)
+    except:
+        print('Файл Channel.txt заблокирован для вывода списка каналов!')
+    
+    
+        
+
+
 
 def fill_Day():        
     # готовим заготовки списков программ по дням недели
@@ -126,16 +140,14 @@ def fill_Day():
 
 
 
-def rtf_to_prog(path_prog):
-    # считываем rtf в список
+def txt_to_prog(path_prog):
+    # считываем txt в список
     
-    # сканируем файлы rtf и формируем списки каналов и программ
-    for name_files in lst_rtf:
-        # открываем файлы rtf построчно сохраняем в список
-        with open(name_files) as infile:
-            content = infile.read()
-        rtftext = rtf_to_text(content)
-        str_rtf = rtftext.splitlines()
+    # сканируем файлы txt и формируем списки каналов и программ
+    for name_files in lst_txt:
+        # открываем файлы txt построчно сохраняем в список
+        with open(name_files, 'w', encoding='utf-8') as file_r:
+            str_txt = file_r.readlines()
         
         # устанавливаем первый день недели, канал, программу
         name_Day = 'ПОНЕДЕЛЬНИК'
@@ -143,7 +155,7 @@ def rtf_to_prog(path_prog):
         name_Pr = ''
      
         # обрабатываем список с программой из файла источника 
-        for str_line in str_rtf:
+        for str_line in str_txt:
             # делим строку на две части по пробелу
             str_sub_line = str_line.rstrip().split(' ', 2)
 
@@ -209,38 +221,32 @@ def rtf_to_prog(path_prog):
                                 lst_D7[lst_Ch.index(name_Ch.strip())].append(name_Pr.strip())
     
 
+# основное тело программы
 def main():
 
     # определяем окружение
     path_prog = os.getcwd()
     
-    # заполняем список сканируемых файлов каналов
-    rtf_to_list(path_prog)
+   # заполняем список сканируемых файлов каналов
+    txt_to_list(path_prog)
 
     # считываем каналы 
-    rtf_to_Channel(path_prog)
+    txt_to_Channel(path_prog)
 
-    # !!!!! запрос сортировки каналов
 
-    # создаем заготовки списков программ по дням
-    fill_Day()
-
-    # считываем программы 
-    rtf_to_prog(path_prog)
-
+ 
     # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
     #read_divH()
-    
-    # print(lst_rtf)
 
-    # считываем файл с программой ТВ
 
-        # # считываем названия и порядок каналов
-        # try:
-        #     with open("Channel.txt", "r", encoding='utf-8') as file:  # file = open("myfile.txt")
-        #         Channel_Name = file.readlines()
-        # except FileNotFoundError:
-        #     print("Невозможно открыть файл Canal.txt")
+
+    # создаем заготовки списков программ по дням
+    # fill_Day()
+
+    # считываем программы 
+    # txt_to_prog(path_prog)
+ 
+   
 
 
 # точка входа.
