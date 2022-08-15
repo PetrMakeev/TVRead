@@ -1,5 +1,7 @@
 import os
 import pathlib
+import copy
+from turtle import clear
 
 
 lst_Ch = []
@@ -38,12 +40,16 @@ def txt_to_list(path_prog):
     # открываем сохраненный словарь каналов
     fl_ch = True
     try:
+        # считываем справочник каналов Chanenl.txt
         with open('Channel.txt', 'r') as file_r:
-            str_txt = file_r.readlines()
+            str_txt_ch = file_r.readlines()
+        for i, el in enumerate(str_txt_ch):
+            str_txt_ch[i]=el[:-1]
     except:
+        # cправочник каналов Channel.txt недоступен
         fl_ch =False
     if not fl_ch:
-        # сливаем словарь каналов в Channel.txt
+        # сливаем список каналов в справочник каналов в Channel.txt
         str_ch=''
         for el in lst_Ch:
             str_ch += ( el[0]+ '|' + el[1] + '\n')
@@ -52,9 +58,57 @@ def txt_to_list(path_prog):
                 file_w.writelines(str_ch)
         except:
             print('Файл Channel.txt заблокирован для вывода списка каналов!')            
-    
-    # выводим список на экран для проверки названий и порядка 
+    else:
+        # формируем список справочника каналов 
+        for str_line_ch in str_txt_ch:
+            str_sub_line = str_line_ch.rstrip().split('|')
+            # сверяем названия каналов из импортируемых файлов со справочником в Channel.txt
+            for i, el in enumerate(lst_Ch):
+                if el[0] == str_sub_line[0]:
+                    lst_Ch[i][1] = str_sub_line[1]
 
+    # выводим телеканаля и запрашиваем действия
+    Loop_list_Ch = True
+    while Loop_list_Ch:
+        # выводим список на экран для проверки названий и порядка 
+        print('----------------------------')
+        print('  №  |  Название телеканала ')
+        print('----------------------------')
+        for i, el in enumerate(lst_Ch,1):
+            print(str(i).center(5) + '|  ' + el[1])
+        print('----------------------------')
+        print('Работа со списком телеканалов:')
+        print('<0> - продолжить обработку')
+        print('<1> - переименовать телеканал')
+        print('<2> - поменять место телеканала в списке')
+
+        # выбираем действие
+        Loop_action_Ch = True
+        while Loop_action_Ch:
+            try:
+                mode_lst1 = (input('Выберите действие <0>'))
+                if len(mode_lst1) == 0:
+                    mode_lst = 0
+                else:
+                    mode_lst = int(mode_lst1)
+
+            # Если полученный ввод не число, будет вызвано исключение
+            except ValueError:
+                # Цикл будет повторяться до правильного ввода
+                print("Error! Это не число, попробуйте снова.")
+            else:
+                if mode_lst>-1 and mode_lst<3:
+                    Loop_action_Ch = False
+        
+        # продолжаем обработку телеканалов
+        if mode_lst == 0:  
+            Loop_list_Ch = False
+        
+        
+
+    
+
+    
 
     
 
@@ -249,6 +303,11 @@ def txt_to_prog(path_prog):
 
 # основное тело программы
 def main():
+
+    #подготовка экрана
+    clear
+    print('Программа для обработки программы телеканалов ')
+    print('---------------------------------------------')
 
     # определяем окружение
     path_prog = os.getcwd()
