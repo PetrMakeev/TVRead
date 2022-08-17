@@ -15,6 +15,8 @@ def set_scr():
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Программа для обработки программы телеканалов ')
     print('---------------------------------------------')
+    print('        Время: Москва + ' + str(divH) +' ч ') 
+    print('---------------------------------------------')
 
 
 # поправка на часовой пояс
@@ -82,7 +84,7 @@ def txt_to_list(path_prog):
     while Loop_list_Ch:
         set_scr()
         # выводим список на экран для проверки названий и порядка 
-        print('----------------------------')
+        #print('----------------------------')
         print('  №  |  Название телеканала ')
         print('----------------------------')
         for i, el in enumerate(lst_Ch,1):
@@ -92,6 +94,7 @@ def txt_to_list(path_prog):
         print('<0> - продолжить обработку')
         print('<1> - переименовать телеканал')
         print('<2> - поменять место телеканала в списке')
+        print('<3> - изменить часовой пояс')
 
         # выбираем действие
         Loop_action_Ch = True
@@ -108,7 +111,7 @@ def txt_to_list(path_prog):
                 # Цикл будет повторяться до правильного ввода
                 print("Это не число, попробуйте снова.")
             else:
-                if mode_lst>-1 and mode_lst<3:
+                if mode_lst>-1 and mode_lst<4:
                     # выход из цикла выбора действия
                     Loop_action_Ch = False
         
@@ -165,7 +168,27 @@ def txt_to_list(path_prog):
             if id1_channel!=id2_channel:
                 # print('Меняем место')
                 lst_Ch.insert(id2_channel-1, lst_Ch.pop(id1_channel-1))
-               
+
+        global divH
+        # меняем часовой пояс
+        if mode_lst == 3:
+            loop_sel_H = True
+            while loop_sel_H:
+                try:
+                    divH_tmp = input('Укажите укажите сдвиг программ в часах (от -1 до 9) <2>:')
+                    if len(divH_tmp) == 0:
+                        divH = 2
+                    else:
+                        divH = int(divH_tmp)
+
+                # Если полученный ввод не число, будет вызвано исключение
+                except ValueError:
+                    # Цикл будет повторяться до правильного ввода
+                    print("Это не число, попробуйте снова.")
+                if divH>-2 and divH<10:
+                    loop_sel_H = False     
+            
+
     # редактирование закончено сливаем откорректированный список телеканалов в Channel.txt
     # сливаем список каналов в справочник каналов в Channel.txt
     str_ch=''
@@ -318,7 +341,8 @@ def txt_to_prog(path_prog):
 
 
  
- 
+def exp_prog() 
+    print('ww')
  
  
        
@@ -331,6 +355,9 @@ def main():
     # определяем окружение
     path_prog = os.getcwd()
     
+    # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
+    #read_divH()
+
    # заполняем список сканируемых файлов каналов
     txt_to_list(path_prog)
 
@@ -340,10 +367,8 @@ def main():
     # считываем каналы 
     txt_to_prog(path_prog)
 
-
- 
-    # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
-    #read_divH()
+    # сохраняем программы в файлы
+    exp_prog()
 
     print('w')   
 
