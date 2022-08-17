@@ -1,3 +1,4 @@
+#from curses.ascii import isalpha
 import os
 import pathlib
 import copy
@@ -18,7 +19,10 @@ def set_scr():
 
 # поправка на часовой пояс
 def timeDiv(strTime):
-    strHourN = int(strTime.split('.')[0]) + divH
+    if ':' in strTime:
+        strHourN = int(strTime.split(':')[0]) + divH
+    else:
+        strHourN = int(strTime.split('.')[0]) + divH
     if strHourN>23 : strHourN = strHourN - 24
     if strHourN<0  : strHourN = 24 - strHourN 
     if strHourN<10:
@@ -224,8 +228,8 @@ def txt_to_prog(path_prog):
             str_txt = file_r.readlines()
             
         # устанавливаем первый день недели, канал, программу
-        # name_Day = 'ПОНЕДЕЛЬНИК'
-        name_Ch = os.path.basename(name_files)[0]
+        name_Day = 'None'
+        name_Ch = os.path.basename(name_files).split('.')[0]
         name_Pr = ''
     
         # обрабатываем список с программой из файла источника 
@@ -239,50 +243,78 @@ def txt_to_prog(path_prog):
             if str_sub_lineD[0].upper() in list_week:
                 # в строке день недели
                 name_Day = str_sub_lineD[0].upper()
-
             else:
                 # в строке программа
                 # отделяем время программы от названия программы
                 if len(str_sub_lineD)>0:
                     str_sub_lineD = str_tmp.split(' ',1)
 
-                    name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
+                    if str_sub_lineD[0][0].isalpha() or name_Pr=='None':
+                        fl_merge = True
+                    else:
+                        fl_merge = False
+                        
+                    if fl_merge:
+                        name_Pr = name_Pr + ' ' + str_tmp
+                    else:
+                        name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
     
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D1[i].append(name_Pr.strip())                            
+                                if fl_merge:
+                                    lst_D1[i][-1] = lst_D1[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D1[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'ВТОРНИК':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D2[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D2[i][-1] = lst_D2[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D2[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'СРЕДА':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D3[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D3[i][-1] = lst_D3[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D3[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'ЧЕТВЕРГ':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D4[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D4[i][-1] = lst_D4[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D4[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'ПЯТНИЦА':
-                        for i, el in enumerate(lst_Ch):
+                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D5[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D5[i][-1] = lst_D5[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D5[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'СУББОТА':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D6[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D6[i][-1] = lst_D6[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D6[i].append(name_Pr.strip())                            
 
                     elif name_Day == 'ВОСКРЕСЕНЬЕ':
                         for i, el in enumerate(lst_Ch):
                             if el[0]==name_Ch:
-                                lst_D7[i].append(name_Pr.strip())
+                                if fl_merge:
+                                    lst_D7[i][-1] = lst_D7[i][-1] + ' ' + str_tmp
+                                else:
+                                    lst_D7[i].append(name_Pr.strip())                            
 
 
  
