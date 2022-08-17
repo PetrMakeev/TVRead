@@ -131,7 +131,8 @@ def txt_to_list(path_prog):
                 rename_channel = (input('Укажите новое название телеканала <' + lst_Ch[id_channel-1][1] + '>: '))
                 if len(rename_channel)>0 : 
                     loop_rename_chanel = False
-            print('Переименовываем телеканал')
+            # print('Переименовываем телеканал')
+            lst_Ch[id_channel-1][1] = rename_channel
 
         # изменение порядка телеканалов
         if mode_lst == 2:
@@ -157,13 +158,14 @@ def txt_to_list(path_prog):
                     loop_sel_pos = False
             # если номера разные меняем места                    
             if id1_channel!=id2_channel:
-                print('Меняем место')
-
+                # print('Меняем место')
+                lst_Ch.insert(id2_channel-1, lst_Ch.pop(id1_channel-1))
+               
     # редактирование закончено сливаем откорректированный список телеканалов в Channel.txt
     # сливаем список каналов в справочник каналов в Channel.txt
     str_ch=''
     for el in lst_Ch:
-        str_ch += ( el[0]+ '|' + el[1] + '\n')
+        str_ch = str_ch + ( el[0]+ '|' + el[1] + '\n')
     try:
         with open('Channel.txt', 'w') as file_w:
             file_w.writelines(str_ch)
