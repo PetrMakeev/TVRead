@@ -341,7 +341,7 @@ def txt_to_prog(path_prog):
 
 
  
-def exp_prog() 
+def exp_prog(): 
     print('ww')
  
  
