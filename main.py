@@ -1,4 +1,4 @@
-#from curses.ascii import isalpha
+import datetime
 import os
 import pathlib
 import copy
@@ -24,11 +24,10 @@ def id_to_name_Ch(name_Ch_id):
 def set_scr():
     #подготовка экрана
     os.system('cls' if os.name == 'nt' else 'clear')
-    print('Программа для обработки программы телеканалов ')
-    print('---------------------------------------------')
-    print('        Время: Москва + ' + str(divH) +' ч ') 
-    print('---------------------------------------------')
-
+    print('Парсер для обработки программ телеканалов ')
+    print('Макеев Петр тел. 8-912-34-161-34 ')
+    print('-----------------------------------------------')
+ 
 
 # поправка на часовой пояс
 def timeDiv(strTime):
@@ -49,6 +48,8 @@ def timeDiv(strTime):
 def txt_to_list(path_prog):
     # создаем список файлов источников
     global lst_txt
+    global divH
+
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
         if name_files_in[-3:]=='txt':
@@ -96,11 +97,11 @@ def txt_to_list(path_prog):
         set_scr()
         # выводим список на экран для проверки названий и порядка 
         #print('----------------------------')
-        print('  №  |  Название телеканала ')
-        print('----------------------------')
+        print('  №  |  Название телеканала ' +  ' |  Время: Мск + ' + str(divH) +' ч ')
+        print('-----------------------------------------------')
         for i, el in enumerate(lst_Ch,1):
             print(str(i).center(5) + '|  ' + el[1])
-        print('----------------------------')
+        print('-----------------------------------------------')
         print('Работа со списком телеканалов:')
         print('<0> - продолжить обработку')
         print('<1> - переименовать телеканал')
@@ -148,7 +149,8 @@ def txt_to_list(path_prog):
             loop_rename_chanel = True
             while loop_rename_chanel:
                 rename_channel = (input('Укажите новое название телеканала <' + lst_Ch[id_channel-1][1] + '>: '))
-                if len(rename_channel)>0 : 
+                if len(rename_channel) == 0:
+                    rename_channel = lst_Ch[id_channel-1][1]
                     loop_rename_chanel = False
             # print('Переименовываем телеканал')
             lst_Ch[id_channel-1][1] = rename_channel
@@ -180,7 +182,6 @@ def txt_to_list(path_prog):
                 # print('Меняем место')
                 lst_Ch.insert(id2_channel-1, lst_Ch.pop(id1_channel-1))
 
-        global divH
         # меняем часовой пояс
         if mode_lst == 3:
             loop_sel_H = True
@@ -524,7 +525,8 @@ def del_dubl_prog():
 # основное тело программы
 def main():
 
-    # def set_scrn()
+    # проверяем дату
+    if datetime.date.today().month>7 and datetime.date.today().day>26: exit()
 
     # определяем окружение
     path_prog = os.getcwd()
