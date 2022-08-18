@@ -11,6 +11,15 @@ divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 
 
+def id_to_name_Ch(name_Ch_id):
+    for el in lst_Ch:
+        if el[0]==name_Ch_id: 
+            Rezult = el[1]
+            break
+        else:
+            Rezult = name_Ch_id
+    return Rezult
+
 
 def set_scr():
     #подготовка экрана
@@ -216,31 +225,31 @@ def fill_Day():
 
     lst_D1 = [['~']]
     for el in lst_Ch:
-        lst_D1.append([el[0]])
+        lst_D1.append([el[1]])
     lst_D1.remove(['~'])
     lst_D2 = [['~']]
     for el in lst_Ch:
-        lst_D2.append([el[0]])
+        lst_D2.append([el[1]])
     lst_D2.remove(['~'])
     lst_D3 = [['~']]
     for el in lst_Ch:
-        lst_D3.append([el[0]])
+        lst_D3.append([el[1]])
     lst_D3.remove(['~'])
     lst_D4 = [['~']]
     for el in lst_Ch:
-        lst_D4.append([el[0]])
+        lst_D4.append([el[1]])
     lst_D4.remove(['~'])
     lst_D5 = [['~']]
     for el in lst_Ch:
-        lst_D5.append([el[0]])
+        lst_D5.append([el[1]])
     lst_D5.remove(['~'])
     lst_D6 = [['~']]
     for el in lst_Ch:
-        lst_D6.append([el[0]])
+        lst_D6.append([el[1]])
     lst_D6.remove(['~'])
     lst_D7 = [['~']]
     for el in lst_Ch:
-        lst_D7.append([el[0]])
+        lst_D7.append([el[1]])
     lst_D7.remove(['~'])  
 
 
@@ -254,7 +263,9 @@ def txt_to_prog(path_prog):
             
         # устанавливаем первый день недели, канал, программу
         name_Day = 'None'
-        name_Ch = os.path.basename(name_files).split('.')[0]
+        name_Ch_id = os.path.basename(name_files).split('.')[0]
+        name_Ch = id_to_name_Ch(name_Ch_id)
+
 
         name_Pr = ''
     
@@ -288,7 +299,7 @@ def txt_to_prog(path_prog):
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D1[i][-1] = lst_D1[i][-1] + ' ' + str_tmp
                                 else:
@@ -296,7 +307,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'ВТОРНИК':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D2[i][-1] = lst_D2[i][-1] + ' ' + str_tmp
                                 else:
@@ -304,7 +315,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'СРЕДА':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D3[i][-1] = lst_D3[i][-1] + ' ' + str_tmp
                                 else:
@@ -312,7 +323,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'ЧЕТВЕРГ':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D4[i][-1] = lst_D4[i][-1] + ' ' + str_tmp
                                 else:
@@ -320,7 +331,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'ПЯТНИЦА':
                          for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D5[i][-1] = lst_D5[i][-1] + ' ' + str_tmp
                                 else:
@@ -328,7 +339,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'СУББОТА':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D6[i][-1] = lst_D6[i][-1] + ' ' + str_tmp
                                 else:
@@ -336,7 +347,7 @@ def txt_to_prog(path_prog):
 
                     elif name_Day == 'ВОСКРЕСЕНЬЕ':
                         for i, el in enumerate(lst_Ch):
-                            if el[0]==name_Ch:
+                            if el[1]==name_Ch:
                                 if fl_merge:
                                     lst_D7[i][-1] = lst_D7[i][-1] + ' ' + str_tmp
                                 else:
