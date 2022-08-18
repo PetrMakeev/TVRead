@@ -294,7 +294,7 @@ def txt_to_prog(path_prog):
                     if fl_merge:
                         name_Pr = name_Pr + ' ' + str_tmp
                     else:
-                        name_Pr = timeDiv(str_sub_lineD[0]) + ' ' + str_sub_lineD[1] 
+                        name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
     
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
@@ -378,8 +378,8 @@ def exp_prog(path_prog):
                 str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog1 = str_prog1 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog1 = str_prog1 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog2 = 'STYLE D \n'
@@ -390,8 +390,8 @@ def exp_prog(path_prog):
                 str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog2 = str_prog2 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog2 = str_prog2 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' СРЕДА\n'
     str_prog3 = 'STYLE D \n'
@@ -402,8 +402,8 @@ def exp_prog(path_prog):
                 str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog3 = str_prog3 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog3 = str_prog3 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ЧЕТВЕРГ\n'
     str_prog4 = 'STYLE D \n'
@@ -414,8 +414,8 @@ def exp_prog(path_prog):
                 str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog4 = str_prog4 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog4 = str_prog4 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ПЯТНИЦА\n'
     str_prog5 = 'STYLE D \n'
@@ -426,8 +426,8 @@ def exp_prog(path_prog):
                 str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog5 = str_prog5 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog5 = str_prog5 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' СУББОТА\n'
     str_prog6 = 'STYLE D \n'
@@ -438,8 +438,8 @@ def exp_prog(path_prog):
                 str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog6 = str_prog6 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog6 = str_prog6 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog7 = 'STYLE D \n'
@@ -450,8 +450,8 @@ def exp_prog(path_prog):
                 str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog7 = str_prog7 +  el_Pr + '\n'
-                str_progN = str_progN +  el_Pr + '\n'
+                str_prog7 = str_prog7 +  el_Pr.replace('|',' ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
 
     # сохраняем данные 
     try:
@@ -503,6 +503,23 @@ def exp_prog(path_prog):
         print('Файл 7.REZ заблокирован для вывода списка каналов!')            
  
        
+def del_dubl_prog():
+    print('a')
+    # перебираем программы понедельника
+    for k, el_prog in enumerate(lst_D1):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ' ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
+                            del lst_D1[k][j]
+
+            
+    
 
 # основное тело программы
 def main():
@@ -524,11 +541,14 @@ def main():
     # считываем каналы 
     txt_to_prog(path_prog)
 
-    print('w')   
+    # сводим дубликаты программ в одну строку
+    del_dubl_prog()
 
-    # сохраняем программы в файлы
+     # сохраняем программы в файлы
     exp_prog(path_prog)
 
+
+    print('w')   
 
 
 # точка входа.
