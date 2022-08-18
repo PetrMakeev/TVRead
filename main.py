@@ -504,7 +504,7 @@ def exp_prog(path_prog):
  
        
 def del_dubl_prog():
-    print('a')
+    
     # перебираем программы понедельника
     for k, el_prog in enumerate(lst_D1):
         for i, el in enumerate(el_prog):
@@ -548,7 +548,7 @@ def main():
     exp_prog(path_prog)
 
 
-    print('w')   
+    # print('w')   
 
 
 # точка входа.
