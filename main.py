@@ -294,7 +294,7 @@ def txt_to_prog(path_prog):
                     if fl_merge:
                         name_Pr = name_Pr + ' ' + str_tmp
                     else:
-                        name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
+                        name_Pr = timeDiv(str_sub_lineD[0]) + ' ' + str_sub_lineD[1] 
     
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
@@ -356,7 +356,7 @@ def txt_to_prog(path_prog):
                 
 
  
-def exp_prog(): 
+def exp_prog(path_prog): 
     # формируем данные для записи в файл
     str_prog1=''
     str_prog2=''
@@ -369,22 +369,138 @@ def exp_prog():
     
     # понедельник
     # перебираем каналы
-    # for el in lst_D1:
-    #     # перебираем программы
-    #     name_ch_id = el[0]
-        
+    str_progN = '-------------------------------\n' + ' ПОНЕДЕЛЬНИК\n'
+    str_prog1 = 'STYLE D \n'
+    for el_D in lst_D1:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog1 = str_prog1 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
 
+    str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
+    str_prog2 = 'STYLE D \n'
+    for el_D in lst_D2:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog2 = str_prog2 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
 
-    #     str_ch = str_ch + ( el[0]+ ' ' + el[1] + '\n')
+    str_progN = '-------------------------------\n' + ' СРЕДА\n'
+    str_prog3 = 'STYLE D \n'
+    for el_D in lst_D3:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog3 = str_prog3 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
 
+    str_progN = '-------------------------------\n' + ' ЧЕТВЕРГ\n'
+    str_prog4 = 'STYLE D \n'
+    for el_D in lst_D4:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog4 = str_prog4 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
 
-    # # сохраняем данные
-    # try:
-    #     with open('Channel.txt', 'w') as file_w:
-    #         file_w.writelines(str_ch)
-    # except:
-    #     print('Файл Channel.txt заблокирован для вывода списка каналов!')            
- 
+    str_progN = '-------------------------------\n' + ' ПЯТНИЦА\n'
+    str_prog5 = 'STYLE D \n'
+    for el_D in lst_D5:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog5 = str_prog5 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
+
+    str_progN = '-------------------------------\n' + ' СУББОТА\n'
+    str_prog6 = 'STYLE D \n'
+    for el_D in lst_D6:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog6 = str_prog6 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
+
+    str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
+    str_prog7 = 'STYLE D \n'
+    for el_D in lst_D7:
+        # перебираем программы
+        for i, el_Pr in enumerate(el_D):
+            if i<1:
+                str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
+                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+            else:
+                str_prog7 = str_prog7 +  el_Pr + '\n'
+                str_progN = str_progN +  el_Pr + '\n'
+
+    # сохраняем данные 
+    try:
+        with open(path_prog +'\\OUT\\REZULT.REZ', 'w') as file_w:
+            file_w.writelines(str_progN)
+    except:
+        print('Файл REZULT.REZ заблокирован для вывода списка каналов!')            
+
+    try:
+        with open(path_prog +'\\OUT\\1.REZ', 'w') as file_w:
+            file_w.writelines(str_prog1)
+    except:
+        print('Файл 1.REZ заблокирован для вывода списка каналов!')            
+
+    try:
+        with open(path_prog +'\\OUT\\2.REZ', 'w') as file_w:
+            file_w.writelines(str_prog2)
+    except:
+        print('Файл 2.REZ заблокирован для вывода списка каналов!')   
+
+    try:
+        with open(path_prog +'\\OUT\\3.REZ', 'w') as file_w:
+            file_w.writelines(str_prog3)
+    except:
+        print('Файл 3.REZ заблокирован для вывода списка каналов!')    
+               
+    try:
+        with open(path_prog +'\\OUT\\4.REZ', 'w') as file_w:
+            file_w.writelines(str_prog4)
+    except:
+        print('Файл 4.REZ заблокирован для вывода списка каналов!')    
+
+    try:
+        with open(path_prog +'\\OUT\\5.REZ', 'w') as file_w:
+            file_w.writelines(str_prog5)
+    except:
+        print('Файл 5.REZ заблокирован для вывода списка каналов!')  
+
+    try:
+        with open(path_prog +'\\OUT\\6.REZ', 'w') as file_w:
+            file_w.writelines(str_prog6)
+    except:
+        print('Файл 6.REZ заблокирован для вывода списка каналов!')   
+
+    try:
+        with open(path_prog +'\\OUT\\7.REZ', 'w') as file_w:
+            file_w.writelines(str_prog7)
+    except:
+        print('Файл 7.REZ заблокирован для вывода списка каналов!')            
  
        
 
@@ -411,7 +527,7 @@ def main():
     print('w')   
 
     # сохраняем программы в файлы
-    exp_prog()
+    exp_prog(path_prog)
 
 
 
