@@ -10,6 +10,8 @@ lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 
+
+
 def set_scr():
     #подготовка экрана
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -28,9 +30,9 @@ def timeDiv(strTime):
     if strHourN>23 : strHourN = strHourN - 24
     if strHourN<0  : strHourN = 24 - strHourN 
     if strHourN<10:
-        Rezult = '0' + str(strHourN) + '.' + strTime[2:]
+        Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
     else:
-        Rezult = str(strHourN) + '.' + strTime[2:]
+        Rezult = str(strHourN) + '.' + strTime[-2:]
     return Rezult
 
 
@@ -190,7 +192,7 @@ def txt_to_list(path_prog):
             
 
     # редактирование закончено сливаем откорректированный список телеканалов в Channel.txt
-    # сливаем список каналов в справочник каналов в Channel.txt
+    # сливаем  справочник каналов в Channel.txt
     str_ch=''
     for el in lst_Ch:
         str_ch = str_ch + ( el[0]+ '|' + el[1] + '\n')
@@ -253,6 +255,7 @@ def txt_to_prog(path_prog):
         # устанавливаем первый день недели, канал, программу
         name_Day = 'None'
         name_Ch = os.path.basename(name_files).split('.')[0]
+
         name_Pr = ''
     
         # обрабатываем список с программой из файла источника 
@@ -339,10 +342,37 @@ def txt_to_prog(path_prog):
                                 else:
                                     lst_D7[i].append(name_Pr.strip())                            
 
+                
 
  
 def exp_prog(): 
-    print('ww')
+    # формируем данные для записи в файл
+    str_prog1=''
+    str_prog2=''
+    str_prog3=''
+    str_prog4=''
+    str_prog5=''
+    str_prog6=''
+    str_prog7=''
+    str_progN=''
+    
+    # понедельник
+    # перебираем каналы
+    # for el in lst_D1:
+    #     # перебираем программы
+    #     name_ch_id = el[0]
+        
+
+
+    #     str_ch = str_ch + ( el[0]+ ' ' + el[1] + '\n')
+
+
+    # # сохраняем данные
+    # try:
+    #     with open('Channel.txt', 'w') as file_w:
+    #         file_w.writelines(str_ch)
+    # except:
+    #     print('Файл Channel.txt заблокирован для вывода списка каналов!')            
  
  
        
@@ -367,10 +397,11 @@ def main():
     # считываем каналы 
     txt_to_prog(path_prog)
 
+    print('w')   
+
     # сохраняем программы в файлы
     exp_prog()
 
-    print('w')   
 
 
 # точка входа.
