@@ -251,8 +251,8 @@ def exp_prog(path_prog):
                 str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog1 = str_prog1 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog1 = str_prog1 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog2 = 'STYLE D \n'
@@ -263,8 +263,8 @@ def exp_prog(path_prog):
                 str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog2 = str_prog2 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog2 = str_prog2 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' СРЕДА\n'
     str_prog3 = 'STYLE D \n'
@@ -275,8 +275,8 @@ def exp_prog(path_prog):
                 str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog3 = str_prog3 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog3 = str_prog3 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ЧЕТВЕРГ\n'
     str_prog4 = 'STYLE D \n'
@@ -287,8 +287,8 @@ def exp_prog(path_prog):
                 str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog4 = str_prog4 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog4 = str_prog4 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ПЯТНИЦА\n'
     str_prog5 = 'STYLE D \n'
@@ -299,8 +299,8 @@ def exp_prog(path_prog):
                 str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog5 = str_prog5 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog5 = str_prog5 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' СУББОТА\n'
     str_prog6 = 'STYLE D \n'
@@ -311,8 +311,8 @@ def exp_prog(path_prog):
                 str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog6 = str_prog6 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog6 = str_prog6 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog7 = 'STYLE D \n'
@@ -323,8 +323,8 @@ def exp_prog(path_prog):
                 str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
                 str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
             else:
-                str_prog7 = str_prog7 +  el_Pr.replace('|',' ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|',' ', 1) + '\n'
+                str_prog7 = str_prog7 +  el_Pr.replace('|', ', ', 1) + '\n'
+                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
 
     # сохраняем данные 
     try:
