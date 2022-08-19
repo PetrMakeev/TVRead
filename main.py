@@ -6,6 +6,7 @@ from turtle import clear
 
 
 lst_Ch = []
+lst_Repl = []
 lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
@@ -44,7 +45,7 @@ def timeDiv(strTime):
     return Rezult
 
 
-# готовим список каналов
+# готовим список каналов и список замен
 def txt_to_list_Ch(path_prog):
 
     global lst_txt
@@ -68,6 +69,21 @@ def txt_to_list_Ch(path_prog):
     for el in str_txt_ch:
         if not (el[0] == '#' or el=='\n'):
             lst_Ch.append(el[:-1].split('|'))
+
+    try:
+        # считываем файл с заменами Replace.txt
+        with open('Replace.txt', 'r') as file_r:
+            str_txt_rpl = file_r.readlines()
+    except:
+        # cправочник каналов Replace.txt недоступен
+        print('Не найден файл со списком каналов!')
+        exit()
+
+    # заполняем справочник замен 
+    for el in str_txt_rpl:
+        if not (el[0] == '#' or el=='\n'):
+            lst_Repl.append(el[:-1].split('|'))
+
 
 
 def fill_Day():        
