@@ -45,173 +45,29 @@ def timeDiv(strTime):
 
 
 # готовим список каналов
-def txt_to_list(path_prog):
-    # создаем список файлов источников
+def txt_to_list_Ch(path_prog):
+
     global lst_txt
     global divH
 
+    # создаем список файлов источников
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
         if name_files_in[-3:]=='txt':
             lst_txt.append(path_prog + '\\in\\' + name_files_in)
-    
-    # составляем словарь каналов
-    for name_files in lst_txt:
-        name_ch_files = os.path.basename(name_files)
-        name_ch = name_ch_files[:name_ch_files.index('.')]
-        lst_Ch.append([name_ch,name_ch])
 
-    # открываем сохраненный словарь каналов
-    fl_ch = True
     try:
-        # считываем справочник каналов Chanenl.txt
+        # считываем файл с телеканалами Chanenl.txt
         with open('Channel.txt', 'r') as file_r:
             str_txt_ch = file_r.readlines()
-        for i, el in enumerate(str_txt_ch):
-            str_txt_ch[i]=el[:-1]
     except:
         # cправочник каналов Channel.txt недоступен
-        fl_ch =False
-    if not fl_ch:
-        # сливаем список каналов в справочник каналов в Channel.txt
-        str_ch=''
-        for el in lst_Ch:
-            str_ch += ( el[0]+ '|' + el[1] + '\n')
-        try:
-            with open('Channel.txt', 'w') as file_w:
-                file_w.writelines(str_ch)
-        except:
-            print('Файл Channel.txt заблокирован для вывода списка каналов!')            
-    else:
-        # формируем список справочника каналов 
-        for str_line_ch in str_txt_ch:
-            str_sub_line = str_line_ch.rstrip().split('|')
-            # сверяем названия каналов из импортируемых файлов со справочником в Channel.txt
-            for i, el in enumerate(lst_Ch):
-                if el[0] == str_sub_line[0]:
-                    lst_Ch[i][1] = str_sub_line[1]
-
-    # выводим телеканаля и запрашиваем действия
-    Loop_list_Ch = True
-    while Loop_list_Ch:
-        set_scr()
-        # выводим список на экран для проверки названий и порядка 
-        #print('----------------------------')
-        print('  №  |  Название телеканала ' +  ' |  Время: Мск + ' + str(divH) +' ч ')
-        print('-----------------------------------------------')
-        for i, el in enumerate(lst_Ch,1):
-            print(str(i).center(5) + '|  ' + el[1])
-        print('-----------------------------------------------')
-        print('Работа со списком телеканалов:')
-        print('<0> - продолжить обработку')
-        print('<1> - переименовать телеканал')
-        print('<2> - поменять место телеканала в списке')
-        print('<3> - изменить часовой пояс')
-
-        # выбираем действие
-        Loop_action_Ch = True
-        while Loop_action_Ch:
-            try:
-                mode_lst1 = (input('Выберите действие <0>'))
-                if len(mode_lst1) == 0:
-                    mode_lst = 0
-                else:
-                    mode_lst = int(mode_lst1)
-
-            # Если полученный ввод не число, будет вызвано исключение
-            except ValueError:
-                # Цикл будет повторяться до правильного ввода
-                print("Это не число, попробуйте снова.")
-            else:
-                if mode_lst>-1 and mode_lst<4:
-                    # выход из цикла выбора действия
-                    Loop_action_Ch = False
-        
-        # продолжаем обработку телеканалов
-        if mode_lst == 0:  
-            Loop_list_Ch = False
-
-        # переименовка телеканала
-        if mode_lst == 1:
-            loop_sel_channel = True
-            while loop_sel_channel:
-                try:
-                    id_channel = int(input('Укажите номер телеканала, для переименования <1 - '+str(len(lst_Ch)) + '>: '))
-                # Если полученный ввод не число, будет вызвано исключение
-                except ValueError:
-                    # Цикл будет повторяться до правильного ввода
-                    print("Это не число, попробуйте снова.")
-                if id_channel>0 and id_channel<len(lst_Ch)+1: 
-                     loop_sel_channel = False
-                else:
-                    print('Вы указали неверный номер телеканала')
-            # указываем новое имя телеканала
-            loop_rename_chanel = True
-            while loop_rename_chanel:
-                rename_channel = (input('Укажите новое название телеканала <' + lst_Ch[id_channel-1][1] + '>: '))
-                if len(rename_channel) == 0:
-                    rename_channel = lst_Ch[id_channel-1][1]
-                    loop_rename_chanel = False
-            # print('Переименовываем телеканал')
-            lst_Ch[id_channel-1][1] = rename_channel
-
-        # изменение порядка телеканалов
-        if mode_lst == 2:
-            loop_sel_id = True
-            while loop_sel_id:
-                try:
-                    id1_channel = int(input('Укажите номер телеканала, для перемещения в списке <1 - '+str(len(lst_Ch)) + ': '))
-                # Если полученный ввод не число, будет вызвано исключение
-                except ValueError:
-                    # Цикл будет повторяться до правильного ввода
-                    print("Это не число, попробуйте снова.")
-                if id1_channel>0 and id1_channel<len(lst_Ch)+1:
-                    loop_sel_id = False
-            loop_sel_pos = True
-            while loop_sel_pos:
-                try:
-                    id2_channel = int(input('Укажите на какое место переместить телеканал <' + lst_Ch[id1_channel-1][1] + '> в списке <1 - '+str(len(lst_Ch)) + ': '))
-                # Если полученный ввод не число, будет вызвано исключение
-                except ValueError:
-                    # Цикл будет повторяться до правильного ввода
-                    print("Это не число, попробуйте снова.")
-                if id2_channel>0 and id2_channel<len(lst_Ch)+1:
-                    loop_sel_pos = False
-            # если номера разные меняем места                    
-            if id1_channel!=id2_channel:
-                # print('Меняем место')
-                lst_Ch.insert(id2_channel-1, lst_Ch.pop(id1_channel-1))
-
-        # меняем часовой пояс
-        if mode_lst == 3:
-            loop_sel_H = True
-            while loop_sel_H:
-                try:
-                    divH_tmp = input('Укажите укажите сдвиг программ в часах (от -1 до 9) <2>:')
-                    if len(divH_tmp) == 0:
-                        divH = 2
-                    else:
-                        divH = int(divH_tmp)
-
-                # Если полученный ввод не число, будет вызвано исключение
-                except ValueError:
-                    # Цикл будет повторяться до правильного ввода
-                    print("Это не число, попробуйте снова.")
-                if divH>-2 and divH<10:
-                    loop_sel_H = False     
-            
-
-    # редактирование закончено сливаем откорректированный список телеканалов в Channel.txt
-    # сливаем  справочник каналов в Channel.txt
-    str_ch=''
-    for el in lst_Ch:
-        str_ch = str_ch + ( el[0]+ '|' + el[1] + '\n')
-    try:
-        with open('Channel.txt', 'w') as file_w:
-            file_w.writelines(str_ch)
-    except:
-        print('Файл Channel.txt заблокирован для вывода списка каналов!')            
-            
+        print('Не найден файл со списком каналов!')
+        exit()
+    # заполняем справочник каналов 
+    for el in str_txt_ch:
+        if not (el[0] == '#' or el=='\n'):
+            lst_Ch.append(el[:-1].split('|'))
 
 
 def fill_Day():        
@@ -535,7 +391,7 @@ def main():
     #read_divH()
 
    # заполняем список сканируемых файлов каналов
-    txt_to_list(path_prog)
+    txt_to_list_Ch(path_prog)
 
     # создаем заготовки списков программ по дням
     fill_Day()
