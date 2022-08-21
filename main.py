@@ -248,6 +248,18 @@ def replace_in_prog(str_prog):
                     str_prog = str_prog[:i] + '»' + str_prog[i+1:]
             except:
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+            
+            try:
+                if str_prog[i-1].isalpha():
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+            except:
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:]               
+
+            try:
+                if str_prog[i+1].isalpha():
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+            except:
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
 
 
             
