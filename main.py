@@ -2,7 +2,8 @@ import datetime
 import os
 import pathlib
 import copy
-from turtle import clear
+#from turtle import clear
+
 
 
 lst_Ch = []
@@ -227,8 +228,42 @@ def txt_to_prog(path_prog):
                                     lst_D7[i].append(name_Pr.strip())                            
 
                 
+def replace_in_prog(str_prog):
+    # меняем двойной апостроф на кавычки елочкой
+    for i, str_sub in enumerate(str_prog):
+        if str_sub == '"' :
+            if i==0:
+                # кавычка в начале строки
+                str_prog = '«' + str_prog[1:]
+            try:
+                if str_prog[i-1] == ' ':
+                    # кавычка перед словом
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+            except:
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
 
+            try:
+                if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
+                    # кавычка после слова
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+            except:
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+
+
+            
+        
+    # делаем замены с перемещением согласно lst_Repl взятого из Replace.txt
+    for el in lst_Repl:
+        str_in = el[0]
+        str_out = el[1]
+        pos_repl = str_prog.upper().find(str_in.upper())
+        if str_prog.upper().find(str_in.upper()) > -1 :
+            str_prog = str_out + ' ' + str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(str_in) :].strip()
+
+        Rezult = str_prog
+    return Rezult
  
+
 def exp_prog(path_prog): 
     # формируем данные для записи в файл
     str_prog1=''
@@ -248,83 +283,125 @@ def exp_prog(path_prog):
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog1 = str_prog1 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog1 = str_prog1 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
+    str_progN =  str_progN + '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog2 = 'STYLE D \n'
     for el_D in lst_D2:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog2 = str_prog2 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog2 = str_prog2 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' СРЕДА\n'
+    str_progN = str_progN + '-------------------------------\n' + ' СРЕДА\n'
     str_prog3 = 'STYLE D \n'
     for el_D in lst_D3:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog3 = str_prog3 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog3 = str_prog3 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' ЧЕТВЕРГ\n'
+    str_progN = str_progN + '-------------------------------\n' + ' ЧЕТВЕРГ\n'
     str_prog4 = 'STYLE D \n'
     for el_D in lst_D4:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog4 = str_prog4 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog4 = str_prog4 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' ПЯТНИЦА\n'
+    str_progN = str_progN + '-------------------------------\n' + ' ПЯТНИЦА\n'
     str_prog5 = 'STYLE D \n'
     for el_D in lst_D5:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog5 = str_prog5 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog5 = str_prog5 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' СУББОТА\n'
+    str_progN = str_progN + '-------------------------------\n' + ' СУББОТА\n'
     str_prog6 = 'STYLE D \n'
     for el_D in lst_D6:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog6 = str_prog6 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog6 = str_prog6 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
-    str_progN = '-------------------------------\n' + ' ВТОРНИК\n'
+    str_progN = str_progN + '-------------------------------\n' + ' ВОСКРЕСЕНЬЕ\n'
     str_prog7 = 'STYLE D \n'
     for el_D in lst_D7:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
-                str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
-                str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                if len(el_D) > 1:
+                    str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                else:
+                    str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                   
             else:
-                str_prog7 = str_prog7 +  el_Pr.replace('|', ', ', 1) + '\n'
-                str_progN = str_progN +  el_Pr.replace('|', ', ', 1) + '\n'
+                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog7 = str_prog7 +  repl_str_prog + '\n'
+                str_progN = str_progN +  repl_str_prog + '\n'
 
     # сохраняем данные 
     try:
@@ -398,7 +475,7 @@ def del_dubl_prog():
 def main():
 
     # проверяем дату
-    if datetime.date.today().month>7 and datetime.date.today().day>26: exit()
+    if datetime.date.today().month>8 and datetime.date.today().day>1: exit()
 
     # определяем окружение
     path_prog = os.getcwd()
