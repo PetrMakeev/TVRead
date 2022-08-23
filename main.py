@@ -3,7 +3,9 @@ import os
 import pathlib
 import copy
 #from turtle import clear
-
+from docx import Document
+from docx.shared import Pt
+from docx.shared import Mm
 
 
 lst_Ch = []
@@ -286,11 +288,42 @@ def exp_prog(path_prog):
     str_prog6=''
     str_prog7=''
     str_progN=''
-    
+
+    doc1 = Document()
+    doc2 = Document()
+    doc3 = Document()
+    doc4 = Document()
+    doc5 = Document()
+    doc6 = Document()
+    doc7 = Document()
+    docN = Document()
+
+    # задаем стиль текста по умолчанию
+    style = doc1.styles['Normal']
+    # название шрифта
+    style.font.name = 'Arial'
+    # размер шрифта
+    style.font.size = Pt(12)
+        
+
+
     # понедельник
     # перебираем каналы
     str_progN = '-------------------------------\n' + ' ПОНЕДЕЛЬНИК\n'
     str_prog1 = 'STYLE D \n'
+
+    # doc
+    paragraph = doc1.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' ПОНЕДЕЛЬНИК')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D1:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -298,17 +331,71 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc1.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc1.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
-                   
+                    # doc
+                    paragraph = doc1.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc1.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog1 = str_prog1 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog1 = str_prog1 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'                
+                # doc
+                paragraph = doc1.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
 
     str_progN =  str_progN + '-------------------------------\n' + ' ВТОРНИК\n'
     str_prog2 = 'STYLE D \n'
+    
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' ВТОРНИК')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc2.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D2:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -316,17 +403,72 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc2.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc2.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    # doc
+                    paragraph = doc2.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc2.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog2 = str_prog2 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog2 = str_prog2 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                 # doc
+                paragraph = doc2.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+
 
     str_progN = str_progN + '-------------------------------\n' + ' СРЕДА\n'
     str_prog3 = 'STYLE D \n'
+
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' СРЕДА')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc3.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D3:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -334,17 +476,71 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc3.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc3.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
-                   
+                    # doc
+                    paragraph = doc3.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc3.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog3 = str_prog3 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog3 = str_prog3 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                 # doc
+                paragraph = doc3.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+
 
     str_progN = str_progN + '-------------------------------\n' + ' ЧЕТВЕРГ\n'
     str_prog4 = 'STYLE D \n'
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' ЧЕТВЕРГ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc4.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D4:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -352,17 +548,70 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc4.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc4.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    # doc
+                    paragraph = doc4.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc4.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog4 = str_prog4 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog4 = str_prog4 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                 # doc
+                paragraph = doc4.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
 
     str_progN = str_progN + '-------------------------------\n' + ' ПЯТНИЦА\n'
     str_prog5 = 'STYLE D \n'
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' ПЯТНИЦА')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc5.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D5:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -370,17 +619,70 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc5.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc5.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    # doc
+                    paragraph = doc5.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc5.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog5 = str_prog5 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog5 = str_prog5 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                 # doc
+                paragraph = doc5.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
 
     str_progN = str_progN + '-------------------------------\n' + ' СУББОТА\n'
     str_prog6 = 'STYLE D \n'
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' СУББОТА')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc6.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
     for el_D in lst_D6:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
@@ -388,32 +690,126 @@ def exp_prog(path_prog):
                 if len(el_D) > 1:
                     str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc6.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc6.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
-                   
+                    # doc
+                    paragraph = doc6.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc6.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog6 = str_prog6 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog6 = str_prog6 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                 # doc
+                paragraph = doc6.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
 
     str_progN = str_progN + '-------------------------------\n' + ' ВОСКРЕСЕНЬЕ\n'
     str_prog7 = 'STYLE D \n'
+    # doc
+    paragraph = docN.add_paragraph('-------------------------------')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+    paragraph = docN.add_paragraph(' ВОСКРЕСЕНЬЕ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
+
+    paragraph = doc7.add_paragraph('STYLE D ')
+    paragraph.paragraph_format.space_before = Mm(0)
+    paragraph.paragraph_format.space_after = Mm(0)
     for el_D in lst_D7:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
             if i<1:
                 if len(el_D) > 1:
-                    str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + '\n'
+                    str_prog7 = str_prog7  + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
+                    # doc
+                    paragraph = doc7.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc7.add_paragraph('STYLE K ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() )
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                 else:
                     str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
+                    # doc
+                    paragraph = doc7.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = doc7.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+
+                    paragraph = docN.add_paragraph('-------------------------------')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
+                    paragraph = docN.add_paragraph(' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
+                    paragraph.paragraph_format.space_before = Mm(0)
+                    paragraph.paragraph_format.space_after = Mm(0)
                    
             else:
-                repl_str_prog = el_Pr.split('|',1)[0] + ', ' + replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog7 = str_prog7 +  repl_str_prog + '\n'
-                str_progN = str_progN +  repl_str_prog + '\n'
+                repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
+                str_prog7 = str_prog7 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                 # doc
+                paragraph = doc7.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+                paragraph = docN.add_paragraph()
+                paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
+                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.paragraph_format.space_before = Mm(0)
+                paragraph.paragraph_format.space_after = Mm(0)
+
+
 
     # сохраняем данные 
     try:
@@ -462,9 +858,48 @@ def exp_prog(path_prog):
         with open(path_prog +'\\OUT\\7.REZ', 'w') as file_w:
             file_w.writelines(str_prog7)
     except:
-        print('Файл 7.REZ заблокирован для вывода списка каналов!')            
- 
+        print('Файл 7.REZ заблокирован для вывода списка каналов!')     
+
+    #doc
+    try:
+        doc1.save(path_prog + '\\OUT\\1.docx')       
+    except:
+        print('Файл 1.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc2.save(path_prog + '\\OUT\\2.docx')       
+    except:
+        print('Файл 2.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc3.save(path_prog + '\\OUT\\3.docx')       
+    except:
+        print('Файл 3.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc4.save(path_prog + '\\OUT\\4.docx')       
+    except:
+        print('Файл 1.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc5.save(path_prog + '\\OUT\\4.docx')       
+    except:
+        print('Файл 1.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc6.save(path_prog + '\\OUT\\5.docx')       
+    except:
+        print('Файл 5.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc1.save(path_prog + '\\OUT\\6.docx')       
+    except:
+        print('Файл 7.docx заблокирован для вывода списка каналов!')     
+    try:
+        doc7.save(path_prog + '\\OUT\\7.docx')       
+    except:
+        print('Файл 1.docx заблокирован для вывода списка каналов!')     
+    try:
+        docN.save(path_prog + '\\OUT\\Rezult.docx')       
+    except:
+        print('Файл Rezult.docx заблокирован для вывода списка каналов!')     
+
        
+
 def del_dubl_prog():
     
     # перебираем программы понедельника
