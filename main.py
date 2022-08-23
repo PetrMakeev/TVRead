@@ -24,6 +24,13 @@ def id_to_name_Ch(name_Ch_id):
             Rezult = name_Ch_id
     return Rezult
 
+def progressSpin(i):
+    tmp_i = i%4
+    if tmp_i == 0: tmp_s='-'
+    if tmp_i == 1: tmp_s='\\'
+    if tmp_i == 2: tmp_s='|'
+    if tmp_i == 3: tmp_s='/'
+    return tmp_s
 
 def set_scr():
     #подготовка экрана
@@ -54,6 +61,8 @@ def txt_to_list_Ch(path_prog):
     global lst_txt
     global divH
 
+
+
     # создаем список файлов источников
     list_in = os.listdir(path_prog + '\\in')
     for name_files_in in list_in:
@@ -69,9 +78,11 @@ def txt_to_list_Ch(path_prog):
         print('Не найден файл со списком каналов!')
         exit()
     # заполняем справочник каналов 
-    for el in str_txt_ch:
+    for i, el in enumerate(str_txt_ch):
         if not (el[0] == '#' or el=='\n'):
             lst_Ch.append(el[:-1].split('|'))
+            print('Считываем список телеканалов - ' + progressSpin(i), end='\r')
+    print('Считываем список телеканалов - ГОТОВО!')
 
     try:
         # считываем файл с заменами Replace.txt
@@ -83,10 +94,11 @@ def txt_to_list_Ch(path_prog):
         exit()
 
     # заполняем справочник замен 
-    for el in str_txt_rpl:
+    for i, el in enumerate(str_txt_rpl):
         if not (el[0] == '#' or el=='\n'):
             lst_Repl.append(el[:-1].split('|'))
-
+            print('Считываем список замен - ' + progressSpin(i), end='\r')            
+    print('Считываем список замен - ГОТОВО!')   
 
 
 def fill_Day():        
@@ -132,6 +144,7 @@ def fill_Day():
 
 def txt_to_prog(path_prog):
     # сканируем файлы txt и формируем  программы
+    progressInt = 0
     for name_files in lst_txt:
         # открываем файлы txt построчно сохраняем в список
         with open(name_files, 'r') as file_r:
@@ -151,6 +164,9 @@ def txt_to_prog(path_prog):
             str_tmp = str_line[:-1].strip()
             # и пустые строки
             if len(str_tmp)<3: continue
+
+            print('Обрабатываем телепрограммы - ' + progressSpin(progressInt), end='\r')  
+            progressInt += 1
  
             str_sub_lineD = str_tmp.split(',',2)
             if str_sub_lineD[0].upper() in list_week:
@@ -228,7 +244,7 @@ def txt_to_prog(path_prog):
                                     lst_D7[i][-1] = lst_D7[i][-1] + ' ' + str_tmp
                                 else:
                                     lst_D7[i].append(name_Pr.strip())                            
-
+    print('Обрабатываем телепрограммы - ГОТОВО!')  
                 
 def replace_in_prog(str_prog):
     # меняем двойной апостроф на кавычки елочкой
@@ -262,8 +278,6 @@ def replace_in_prog(str_prog):
                     str_prog = str_prog[:i] + '«' + str_prog[i+1:]
             except:
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-
-
             
         
     # делаем замены с перемещением согласно lst_Repl взятого из Replace.txt
@@ -305,7 +319,7 @@ def exp_prog(path_prog):
     # размер шрифта
     style.font.size = Pt(12)
         
-
+    progressInt = 0
 
     # понедельник
     # перебираем каналы
@@ -327,14 +341,18 @@ def exp_prog(path_prog):
     for el_D in lst_D1:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc1.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc1.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc1.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -349,9 +367,9 @@ def exp_prog(path_prog):
                     str_prog1 = str_prog1 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc1.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc1.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc1.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -399,14 +417,18 @@ def exp_prog(path_prog):
     for el_D in lst_D2:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc2.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc2.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc2.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -421,9 +443,9 @@ def exp_prog(path_prog):
                     str_prog2 = str_prog2 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc2.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc2.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc2.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -472,14 +494,18 @@ def exp_prog(path_prog):
     for el_D in lst_D3:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc3.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc3.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc3.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -494,9 +520,9 @@ def exp_prog(path_prog):
                     str_prog3 = str_prog3 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc3.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc3.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc3.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -544,14 +570,18 @@ def exp_prog(path_prog):
     for el_D in lst_D4:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc4.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc4.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc4.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -566,9 +596,9 @@ def exp_prog(path_prog):
                     str_prog4 = str_prog4 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc4.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc4.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc4.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -615,14 +645,18 @@ def exp_prog(path_prog):
     for el_D in lst_D5:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc5.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc5.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc5.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -637,9 +671,9 @@ def exp_prog(path_prog):
                     str_prog5 = str_prog5 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc5.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc5.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc5.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -686,14 +720,18 @@ def exp_prog(path_prog):
     for el_D in lst_D6:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+            
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+                        
             if i<1:
                 if len(el_D) > 1:
                     str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc6.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc6.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc6.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -708,9 +746,9 @@ def exp_prog(path_prog):
                     str_prog6 = str_prog6 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc6.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc6.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc6.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -756,14 +794,18 @@ def exp_prog(path_prog):
     for el_D in lst_D7:
         # перебираем программы
         for i, el_Pr in enumerate(el_D):
+
+            print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+            progressInt +=  1
+
             if i<1:
                 if len(el_D) > 1:
                     str_prog7 = str_prog7  + 'STYLE K ' + el_Pr.upper() + '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + '\n'
                     # doc
-                    paragraph = doc7.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc7.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc7.add_paragraph('STYLE K ' + el_Pr.upper() )
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -778,9 +820,9 @@ def exp_prog(path_prog):
                     str_prog7 = str_prog7 + 'STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     str_progN =  str_progN + ' ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!' +  '\n'
                     # doc
-                    paragraph = doc7.add_paragraph('-------------------------------')
-                    paragraph.paragraph_format.space_before = Mm(0)
-                    paragraph.paragraph_format.space_after = Mm(0)
+                    # paragraph = doc7.add_paragraph('-------------------------------')
+                    # paragraph.paragraph_format.space_before = Mm(0)
+                    # paragraph.paragraph_format.space_after = Mm(0)
                     paragraph = doc7.add_paragraph('STYLE K ' + el_Pr.upper() + ' !!!! ПРОПУЩЕН !!!!')
                     paragraph.paragraph_format.space_before = Mm(0)
                     paragraph.paragraph_format.space_after = Mm(0)
@@ -898,6 +940,8 @@ def exp_prog(path_prog):
     except:
         print('Файл Rezult.docx заблокирован для вывода списка каналов!')     
 
+    print('Сохранение результатов - ГОТОВО!')
+
        
 
 def del_dubl_prog():
@@ -950,7 +994,7 @@ def main():
      # сохраняем программы в файлы
     exp_prog(path_prog)
 
-    input('Телепрограммы обработаны, результаты в папке OUT')
+    input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
     # print('w')   
 
 
