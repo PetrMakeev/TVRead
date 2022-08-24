@@ -24,7 +24,7 @@ doc6 = Document()
 doc7 = Document()
 docN = Document()
 
-
+# возвращаем название канала по имени файла
 def id_to_name_Ch(name_Ch_id):
     for el in lst_Ch:
         if el[0]==name_Ch_id: 
@@ -42,8 +42,8 @@ def progressSpin(i):
     if tmp_i == 3: tmp_s='/'
     return tmp_s
 
+#подготовка экрана
 def set_scr():
-    #подготовка экрана
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Парсер для обработки программ телеканалов ')
     print('Макеев Петр тел. 8-912-34-161-34 ')
@@ -70,8 +70,6 @@ def txt_to_list_Ch(path_prog):
 
     global lst_txt
     global divH
-
-
 
     # создаем список файлов источников
     list_in = os.listdir(path_prog + '\\in')
@@ -111,8 +109,9 @@ def txt_to_list_Ch(path_prog):
     print('Считываем список замен - ГОТОВО!')   
 
 
+# готовим  списки телепрограмм по дням недели для наполнения
 def fill_Day():        
-    # готовим заготовки списков программ по дням недели
+    
     global lst_D1
     global lst_D2
     global lst_D3
@@ -164,7 +163,6 @@ def txt_to_prog(path_prog):
         name_Day = 'None'
         name_Ch_id = os.path.basename(name_files).split('.')[0]
         name_Ch = id_to_name_Ch(name_Ch_id)
-
 
         name_Pr = ''
     
@@ -254,42 +252,9 @@ def txt_to_prog(path_prog):
                                     lst_D7[i][-1] = lst_D7[i][-1] + ' ' + str_tmp
                                 else:
                                     lst_D7[i].append(name_Pr.strip())                            
-    print('Обрабатываем телепрограммы - ГОТОВО!')  
+    print('Обрабатываем телепрограммы - ВЫПОЛНЕНО!')  
                 
 def replace_in_prog(str_prog):
-    # меняем двойной апостроф на кавычки елочкой
-    for i, str_sub in enumerate(str_prog):
-        if str_sub == '"' :
-            if i==0:
-                # кавычка в начале строки
-                str_prog = '«' + str_prog[1:]
-            try:
-                if str_prog[i-1] == ' ':
-                    # кавычка перед словом
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-            except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-
-            try:
-                if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
-                    # кавычка после слова
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-            except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-            
-            try:
-                if str_prog[i-1].isalpha():
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-            except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]               
-
-            try:
-                if str_prog[i+1].isalpha():
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-            except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-            
-        
     # делаем замены с перемещением согласно lst_Repl взятого из Replace.txt
     for el in lst_Repl:
         str_in = el[0]
@@ -298,8 +263,59 @@ def replace_in_prog(str_prog):
         if str_prog.upper().find(str_in.upper()) > -1 :
             str_prog = str_out + ' ' + str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(str_in) :].strip()
 
-        Rezult = str_prog
+    # меняем двойной апостроф на кавычки елочкой
+    pos1 = -1
+    pos2 = -1
+    for i, str_sub in enumerate(str_prog):
+        if str_sub == '"' :
+            if i==0:
+                # кавычка в начале строки
+                str_prog = '«' + str_prog[1:]
+                pos1 = i
+            try:
+                if str_prog[i-1] == ' ':
+                    # кавычка перед словом
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    pos1 = i
+            except:
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                pos1 = i
+
+            try:
+                if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
+                    # кавычка после слова
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                    pos2 = i
+
+            except:
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                pos2 = i
+            
+            try:
+                if str_prog[i-1].isalpha():
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                    pos2 = i
+            except:
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:] 
+                pos1 = i              
+
+            try:
+                if str_prog[i+1].isalpha():
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    pos1 = i
+            except:
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                pos2 = i
+!!! 
+    # убираем CapsLock из названий передач
+    if pos1 > -1 and pos2 > pos1 and str_prog[pos1+2].isupper() and str_prog[pos1+3].isupper():
+        str_prog = str_prog[:pos1+1] + str_prog[pos1+1:pos2].capitalize() + str_prog[pos2:]            
+
+    Rezult = str_prog
+
     return Rezult
+
+
  
 # сохранение сведений о телепрограмме
 def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
@@ -351,7 +367,7 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
         paragraph.paragraph_format.space_after = Mm(0)
     return [str_prog_, str_prog_N]
 
-
+# экспорт в файлы 
 def exp_prog(path_prog): 
 
 
