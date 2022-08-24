@@ -1,4 +1,5 @@
 import datetime
+from operator import truediv
 import os
 import pathlib
 import copy
@@ -13,6 +14,10 @@ lst_Repl = []
 lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
+vozrast = []
+for i in range(0,18):
+    #lst_tmp = [' ' + str(i) + '+'], ['(' + str(i) + '+']
+    vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
 
 
 doc1 = Document()
@@ -253,6 +258,8 @@ def txt_to_prog(path_prog):
                                 else:
                                     lst_D7[i].append(name_Pr.strip())                            
     print('Обрабатываем телепрограммы - ВЫПОЛНЕНО!')  
+
+
                 
 def replace_in_prog(str_prog):
     # делаем замены с перемещением согласно lst_Repl взятого из Replace.txt
@@ -264,52 +271,92 @@ def replace_in_prog(str_prog):
             str_prog = str_out + ' ' + str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(str_in) :].strip()
 
     # меняем двойной апостроф на кавычки елочкой
-    pos1 = -1
-    pos2 = -1
+    find_kav = False
+    find_i = len(str_prog)
+
     for i, str_sub in enumerate(str_prog):
         if str_sub == '"' :
             if i==0:
                 # кавычка в начале строки
                 str_prog = '«' + str_prog[1:]
-                pos1 = i
             try:
                 if str_prog[i-1] == ' ':
                     # кавычка перед словом
                     str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-                    pos1 = i
             except:
                 str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-                pos1 = i
 
             try:
                 if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
                     # кавычка после слова
                     str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-                    pos2 = i
-
             except:
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-                pos2 = i
-            
+                find_kav = True
+                find_i = i
+           
             try:
                 if str_prog[i-1].isalpha():
                     str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-                    pos2 = i
+                    find_kav = True
+                    find_i = i
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:] 
-                pos1 = i              
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:]              
 
             try:
                 if str_prog[i+1].isalpha():
                     str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-                    pos1 = i
             except:
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
-                pos2 = i
-!!! 
-    # убираем CapsLock из названий передач
-    if pos1 > -1 and pos2 > pos1 and str_prog[pos1+2].isupper() and str_prog[pos1+3].isupper():
-        str_prog = str_prog[:pos1+1] + str_prog[pos1+1:pos2].capitalize() + str_prog[pos2:]            
+                find_kav = True
+                find_i = i
+        if find_kav: break
+
+    # сканируем обратно строку в поиске возрастной категории
+    vozrast_ind = ''
+    if len(str_prog)> find_i+2:
+        for j in range(len(str_prog), find_i, -1):
+            if (str_prog[j-5:j-1] in vozrast) : 
+                if str_prog[j-5] == '(':
+                    vozrast_ind = ' ' + str_prog [j-4:j-1]
+                else:
+                    vozrast_ind = str_prog [j-4:j-1]
+                break
+
+
+
+
+    # обрезаем строку и вставляем возрастной индекс
+
+
+
+
+    # if find_kav:
+    #     if not vozrast_ind == '':
+    #         str_prog = str_prog[:i+1] + '^' + vozrast_ind.strip()
+    #     else:
+    #         str_prog = str_prog[:i+1]
+
+                
+                
+                
+   
+
+
+    # убираем CapsLock
+    for i, str_sub in enumerate(str_prog):
+        # ищем CapsLock
+        if i<len(str_prog)-1:
+            if str_prog[i].isalpha() and str_prog[i+1].isalpha():
+                    if str_prog[i].isupper() and str_prog[i+1].isupper():
+                        for k in range(i+2, len(str_prog)):
+                            if not str_prog[k].isalpha() or str_prog[k]=='.':
+                                str_prog = str_prog[:i] + str_prog[i:k].capitalize() + str_prog[k:]   
+                                i = k
+
+
+
+
 
     Rezult = str_prog
 
