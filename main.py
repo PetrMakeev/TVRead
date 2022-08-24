@@ -383,18 +383,18 @@ def exp_prog(path_prog):
                     
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog1 = str_prog1 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'                
+                str_prog1 = str_prog1 + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
                 # doc
                 paragraph = doc1.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -459,18 +459,18 @@ def exp_prog(path_prog):
                    
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog2 = str_prog2 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_prog2 = str_prog2 + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
                  # doc
                 paragraph = doc2.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -536,18 +536,18 @@ def exp_prog(path_prog):
                     
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog3 = str_prog3 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_prog3 = str_prog3 + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
                  # doc
                 paragraph = doc3.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -612,18 +612,18 @@ def exp_prog(path_prog):
                    
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog4 = str_prog4 + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' + repl_str_prog + '\n'
+                str_prog4 = str_prog4 + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' + repl_str_prog + '\n'
                  # doc
                 paragraph = doc4.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -687,18 +687,18 @@ def exp_prog(path_prog):
                    
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog5 = str_prog5 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_prog5 = str_prog5 + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
                  # doc
                 paragraph = doc5.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -762,18 +762,18 @@ def exp_prog(path_prog):
                     
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog6 = str_prog6 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_prog6 = str_prog6 + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
                  # doc
                 paragraph = doc6.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -836,18 +836,18 @@ def exp_prog(path_prog):
                    
             else:
                 repl_str_prog = replace_in_prog(el_Pr.split('|',1)[1]) 
-                str_prog7 = str_prog7 + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
-                str_progN = str_progN + el_Pr.split('|',1)[0] + ', ' +  repl_str_prog + '\n'
+                str_prog7 = str_prog7 + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
+                str_progN = str_progN + el_Pr.split('|',1)[0] + ' ' +  repl_str_prog + '\n'
                  # doc
                 paragraph = doc7.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
                 paragraph = docN.add_paragraph()
                 paragraph.add_run(el_Pr.split('|',1)[0] ).bold = True
-                paragraph.add_run(', ' + repl_str_prog).bold = False
+                paragraph.add_run(' ' + repl_str_prog).bold = False
                 paragraph.paragraph_format.space_before = Mm(0)
                 paragraph.paragraph_format.space_after = Mm(0)
 
@@ -956,7 +956,7 @@ def del_dubl_prog():
                         lst_el_seek = el_seek.split('|',1)[1]
                         if lst_el==lst_el_seek:
                             # найден дубль в j для i
-                            lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ' ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
+                            lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ', ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
                             del lst_D1[k][j]
 
             
