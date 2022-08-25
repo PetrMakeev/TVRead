@@ -270,7 +270,15 @@ def replace_in_prog(str_prog):
         if str_prog.upper().find(str_in.upper()) > -1 :
             str_prog = str_out + ' ' + str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(str_in) :].strip()
 
-    # меняем двойной апостроф на кавычки елочкой
+
+    # сканируем  в поиске возрастной категории
+    vozrast_ind = ''
+    for j, el_v in enumerate(vozrast):
+        if el_v in str_prog:
+            vozrast_ind = vozrast[j].replace('(', ' ').strip()
+            break
+
+    # меняем двойной апостроф на кавычки елочкой и отрезаем строку после '»'
     find_kav = False
     find_i = len(str_prog)
 
@@ -283,38 +291,38 @@ def replace_in_prog(str_prog):
             try:
                 if str_prog[i-1] == ' ':
                     # кавычка перед словом
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:].title()
                     continue
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:].title()
                 continue
 
             try:
                 if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
                     # кавычка после слова
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                    str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
                     find_kav = True
                     find_i = i
                     continue
             except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
                 find_kav = True
                 find_i = i
                 continue          
             try:
                 if str_prog[i-1].isalpha():
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                    str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
                     find_kav = True
                     find_i = i
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:].title()
                               
 
             try:
                 if str_prog[i+1].isalpha():
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    str_prog = str_prog[:i] + '«' + str_prog[i+1:].title()
             except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
                 find_kav = True
                 find_i = i
 
@@ -323,46 +331,13 @@ def replace_in_prog(str_prog):
             break
     
 
-    # сканируем обратно строку в поиске возрастной категории
-    vozrast_ind = ''
-    if len(str_prog)> find_i+2:
-        for j in range(len(str_prog), find_i, -1):
-            if (str_prog[j-5:j-1] in vozrast) : 
-                if str_prog[j-5] == '(':
-                    vozrast_ind =  str_prog [j-4:j-1]
-                else:
-                    vozrast_ind = str_prog [j-4:j-1]
-                break
-
-
-
 
     # обрезаем строку и вставляем возрастной индекс
-    if find_kav:
-        if not vozrast_ind == '':
+    if not vozrast_ind=='':
+        if find_kav:
             str_prog = str_prog[:i] + '^' + vozrast_ind.strip()
         else:
-            str_prog = str_prog[:i]
-
-                
-                
-                
-   
-
-
-    # убираем CapsLock
-    for i, str_sub in enumerate(str_prog):
-        # ищем CapsLock
-        if i<len(str_prog)-1:
-            if str_prog[i].isalpha() and str_prog[i+1].isalpha():
-                    if str_prog[i].isupper() and str_prog[i+1].isupper():
-                        for k in range(i+2, len(str_prog)):
-                            if not str_prog[k].isalpha() or str_prog[k]=='.':
-                                str_prog = str_prog[:i] + str_prog[i:k].capitalize() + str_prog[k:]   
-                                i = k
-
-
-
+            str_prog = str_prog[:str_prog.find(vozrast_ind)-1] + '^' + vozrast_ind.strip()
 
 
     Rezult = str_prog
@@ -413,6 +388,7 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
             vozrast_id = repl_str_prog.split('^',1)[1]
             repl_str_prog = repl_str_prog.split('^',1)[0]
             str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + ' ' + vozrast_id +'\n'
+
 
         str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
         str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
