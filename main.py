@@ -279,29 +279,36 @@ def replace_in_prog(str_prog):
             if i==0:
                 # кавычка в начале строки
                 str_prog = '«' + str_prog[1:]
+                continue
             try:
                 if str_prog[i-1] == ' ':
                     # кавычка перед словом
                     str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    continue
             except:
                 str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                continue
 
             try:
                 if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
                     # кавычка после слова
                     str_prog = str_prog[:i] + '»' + str_prog[i+1:]
+                    find_kav = True
+                    find_i = i
+                    continue
             except:
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
                 find_i = i
-           
+                continue          
             try:
                 if str_prog[i-1].isalpha():
                     str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                     find_kav = True
                     find_i = i
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]              
+                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                              
 
             try:
                 if str_prog[i+1].isalpha():
@@ -310,7 +317,11 @@ def replace_in_prog(str_prog):
                 str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
                 find_i = i
-        if find_kav: break
+
+        if find_kav: 
+            find_i = i
+            break
+    
 
     # сканируем обратно строку в поиске возрастной категории
     vozrast_ind = ''
@@ -318,7 +329,7 @@ def replace_in_prog(str_prog):
         for j in range(len(str_prog), find_i, -1):
             if (str_prog[j-5:j-1] in vozrast) : 
                 if str_prog[j-5] == '(':
-                    vozrast_ind = ' ' + str_prog [j-4:j-1]
+                    vozrast_ind =  str_prog [j-4:j-1]
                 else:
                     vozrast_ind = str_prog [j-4:j-1]
                 break
@@ -327,15 +338,11 @@ def replace_in_prog(str_prog):
 
 
     # обрезаем строку и вставляем возрастной индекс
-
-
-
-
-    # if find_kav:
-    #     if not vozrast_ind == '':
-    #         str_prog = str_prog[:i+1] + '^' + vozrast_ind.strip()
-    #     else:
-    #         str_prog = str_prog[:i+1]
+    if find_kav:
+        if not vozrast_ind == '':
+            str_prog = str_prog[:i] + '^' + vozrast_ind.strip()
+        else:
+            str_prog = str_prog[:i]
 
                 
                 
@@ -397,13 +404,23 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
             paragraph.paragraph_format.space_after = Mm(0)
             
     else:
+
         repl_str_prog = replace_in_prog(el_Pr_.split('|',1)[1]) 
+        
+        vozrast_id = ''
+        #отделяем возрастную категорию
+        if '^' in repl_str_prog:
+            vozrast_id = repl_str_prog.split('^',1)[1]
+            repl_str_prog = repl_str_prog.split('^',1)[0]
+            str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + ' ' + vozrast_id +'\n'
+
         str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
         str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
         # doc
         paragraph = doc_.add_paragraph()
         paragraph.add_run(el_Pr_.split('|',1)[0] ).bold = True
         paragraph.add_run(' ' + repl_str_prog).bold = False
+        paragraph.add_run(vozrast_id).font.superscript = True
         paragraph.paragraph_format.space_before = Mm(0)
         paragraph.paragraph_format.space_after = Mm(0)
 
@@ -413,6 +430,8 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
         paragraph.paragraph_format.space_before = Mm(0)
         paragraph.paragraph_format.space_after = Mm(0)
     return [str_prog_, str_prog_N]
+
+
 
 # экспорт в файлы 
 def exp_prog(path_prog): 
