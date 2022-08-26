@@ -16,7 +16,7 @@ divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 vozrast = []
 for i in range(0,18):
-    #lst_tmp = [' ' + str(i) + '+'], ['(' + str(i) + '+']
+
     vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
 
 
@@ -155,8 +155,9 @@ def fill_Day():
 
 
 
+# сканируем файлы txt и формируем  программы
 def txt_to_prog(path_prog):
-    # сканируем файлы txt и формируем  программы
+    
     progressInt = 0
     for name_files in lst_txt:
         # открываем файлы txt построчно сохраняем в список
@@ -274,7 +275,7 @@ def replace_in_prog(str_prog):
     vozrast_ind = ''
     for j, el_v in enumerate(vozrast):
         if el_v in str_prog:
-            vozrast_ind = vozrast[j].replace('(', ' ').strip()
+            vozrast_ind = vozrast[j]
             break
 
     # меняем двойной апостроф на кавычки елочкой и отрезаем строку после '»'
@@ -299,18 +300,18 @@ def replace_in_prog(str_prog):
             try:
                 if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
                     # кавычка после слова
-                    str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                     find_kav = True
                     find_i = i
                     continue
             except:
-                str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
                 find_i = i
                 continue          
             try:
                 if str_prog[i-1].isalpha():
-                    str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
+                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                     find_kav = True
                     find_i = i
             except:
@@ -321,7 +322,7 @@ def replace_in_prog(str_prog):
                 if str_prog[i+1].isalpha():
                     str_prog = str_prog[:i] + '«' + str_prog[i+1:]
             except:
-                str_prog = str_prog[:i] + '»' #+ str_prog[i+1:]
+                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
                 find_i = i
 
@@ -329,15 +330,35 @@ def replace_in_prog(str_prog):
             find_i = i
             break
     
-    str_prog = str_prog.title()
+    # обработка капслока 
+    # str_prog = str_prog.title()
 
-    # обрезаем строку и вставляем возрастной индекс
-    if not vozrast_ind=='':
-        if find_kav:
-            str_prog = str_prog[:i] + '^' + vozrast_ind.strip()
-        else:
-            str_prog = str_prog[:str_prog.find(vozrast_ind)-1] + '^' + vozrast_ind.strip()
+    # вырезаем из строки и вставляем в конец возрастной индекс !!!!!!!! двоит строки
+    # repl_vozr_sub = ''
+    # if not vozrast_ind=='':
+    #     # определяем строку для замены возрастной категории
+    #     if vozrast_ind[0] == '(':
+    #         repl_vozr_sub = vozrast_ind + ')'
+    #     else:
+    #         repl_vozr_sub = vozrast_ind 
+    #     str_prog = str_prog.replace(repl_vozr_sub, '') + '^' + vozrast_ind.replace('(', ' ').strip()
 
+    # убираем двойной пробел, пробел перед точкой, звездочку в 
+    # скобках и двойные точки
+    # str_prog = (str_prog.replace('  ', ' ').
+    #                     replace(' .', '.').
+    #                     replace('..', '.').
+    #                     replace('..','.').
+    #                     replace('(*)', '')  )
+    # # убираем "г." и год
+    # pos_g = str_prog.find('г.')
+    # if pos_g > 6:
+    #     if str_prog[pos_g-1]==' ':
+    #         if str_prog[pos_g-2].isdigit():
+    #             str_prog = str_prog[:pos_g-5] + str_prog[pos_g+1:]
+    #     else:
+    #         if str_prog[pos_g-1].isdigit():
+    #             str_prog = str_prog[:pos_g-4] + str_prog[pos_g+1:]
 
     Rezult = str_prog
 
