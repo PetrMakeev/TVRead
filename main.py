@@ -15,9 +15,11 @@ lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
 vozrast = []
-for i in range(0,18):
-
+for i in range(0,20):
     vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
+god_film = []
+for i in range(1900,2050):
+    god_film.append(str(i))
 
 
 doc1 = Document()
@@ -261,105 +263,137 @@ def txt_to_prog(path_prog):
 
 
                 
-# делаем замены с перемещением согласно lst_Repl взятого из Replace.txt
+# делаем анализ строки программы 
+# проводим замены и синтезируем строку 
+# str_sub_repl - строка замены 
+# str_sub_vozrast - строка возрастное ограничение
+# str_sub_name_prog - строка программы внутри кавычек елочкой
+
 def replace_in_prog(str_prog):
+
+    # определяем замену вырезаем из строки
+    # и сохраняем в переменной str_sub_repl
     for el in lst_Repl:
-        str_in = el[0]
-        str_out = el[1]
-        pos_repl = str_prog.upper().find(str_in.upper())
-        if str_prog.upper().find(str_in.upper()) > -1 :
-            str_prog = str_out + ' ' + str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(str_in) :].strip()
+        pos_repl = str_prog.upper().find(el[0].upper())
+        if str_prog.upper().find(el[0].upper()) > -1 :
+            str_sub_repl = el[1]
+            str_prog = str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
+        else:
+            str_sub_repl = ''
 
 
     # сканируем  в поиске возрастной категории
-    vozrast_ind = ''
+    str_sub_vozrast = ''
     for j, el_v in enumerate(vozrast):
         if el_v in str_prog:
-            vozrast_ind = vozrast[j]
+            str_sub_vozrast = vozrast[j]
             break
+    # вырезаем из строки 
+    # и сохраняем возрастной индекс str_sub_vozrast
+    repl_vozr_sub = ''
+    if not str_sub_vozrast=='':
+        if str_sub_vozrast[0] == '(':
+            repl_vozr_sub = str_sub_vozrast + ')'
+        else:
+            repl_vozr_sub = str_sub_vozrast 
+        if not repl_vozr_sub=='':
+            str_prog = str_prog.replace(repl_vozr_sub, '') 
+            str_sub_vozrast = str_sub_vozrast.replace('(', ' ').strip()
+        else:
+            str_sub_vozrast = ''
 
-    # меняем двойной апостроф на кавычки елочкой и отрезаем строку после '»'
+    # меняем двойной апостроф на кавычки елочкой 
+    # и вырезаем строку внутри кавычек елочек
     find_kav = False
     find_i = len(str_prog)
-
+    pos1 = -1
+    pos2 = -1
     for i, str_sub in enumerate(str_prog):
         if str_sub == '"' :
             if i==0:
                 # кавычка в начале строки
-                str_prog = '«' + str_prog[1:]
+                pos1 = 0
                 continue
             try:
                 if str_prog[i-1] == ' ':
                     # кавычка перед словом
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    pos1 = i
                     continue
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                pos1 = i
                 continue
 
             try:
                 if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
                     # кавычка после слова
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                     find_kav = True
-                    find_i = i
+                    pos2 = i
                     continue
             except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
-                find_i = i
+                pos2 = i
                 continue          
             try:
                 if str_prog[i-1].isalpha():
-                    str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                     find_kav = True
-                    find_i = i
+                    pos2 = i
             except:
-                str_prog = str_prog[:i] + '«' + str_prog[i+1:]
-                              
-
+                pos1 = i+1
             try:
                 if str_prog[i+1].isalpha():
-                    str_prog = str_prog[:i] + '«' + str_prog[i+1:]
+                    pos1 = i
             except:
-                str_prog = str_prog[:i] + '»' + str_prog[i+1:]
                 find_kav = True
-                find_i = i
+                pos2 = i
+                              
+        if find_kav: break
 
-        if find_kav: 
-            find_i = i
-            break
+    if pos2>pos1:
+        str_sub_name_prog = str_prog[pos1+1:pos2]
+        str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
+    else:
+        str_sub_name_prog = ''
+
     
     # обработка капслока 
 
-    # вырезаем из строки и вставляем в конец возрастной индекс !!!!!!!! двоит строки
-    repl_vozr_sub = ''
-    if not vozrast_ind=='':
-        # определяем строку для замены возрастной категории
-        if vozrast_ind[0] == '(':
-            repl_vozr_sub = vozrast_ind + ')'
-        else:
-            repl_vozr_sub = vozrast_ind 
-        str_prog = str_prog.replace(repl_vozr_sub, '') + '^' + vozrast_ind.replace('(', ' ').strip()
-
-    # убираем двойной пробел, пробел перед точкой, звездочку в 
-    # скобках и двойные точки
-    # str_prog = (str_prog.replace('  ', ' ').
-    #                     replace(' .', '.').
-    #                     replace('..', '.').
-    #                     replace('..','.').
-    #                     replace('(*)', '')  )
     # # убираем "г." и год
-    # pos_g = str_prog.find('г.')
-    # if pos_g > 6:
-    #     if str_prog[pos_g-1]==' ':
-    #         if str_prog[pos_g-2].isdigit():
-    #             str_prog = str_prog[:pos_g-5] + str_prog[pos_g+1:]
-    #     else:
-    #         if str_prog[pos_g-1].isdigit():
-    #             str_prog = str_prog[:pos_g-4] + str_prog[pos_g+1:]
+    pos_g = str_prog.find('г.')
+    if pos_g > 6:
+        if str_prog[pos_g-1]==' ':
+            if str_prog[pos_g-2].isdigit():
+                str_prog = str_prog[:pos_g-5] + str_prog[pos_g+1:]
+        else:
+            if str_prog[pos_g-1].isdigit():
+                str_prog = str_prog[:pos_g-4] + str_prog[pos_g+1:]
+    # убирем год без "г."
+    for el_god in god_film:
+        pos_g = str_prog.find(el_god)
+        if not pos_g<0:
+            str_prog = str_prog[:pos_g] + str_prog[pos_g+4:]
 
-    Rezult = str_prog
+
+
+
+    # убираем  мусор: 
+    # двойной пробел
+    # пробел перед точкой, 
+    # звездочку в скобках 
+    # S в скобках
+    # двойные точки
+    str_prog = (str_prog.strip().
+                        replace('  ', ' ').
+                        replace(' .', '.').
+                        replace('..', '.').
+                        replace('..','.').
+                        replace('(*)', '').
+                        replace('(S)', '')
+                )
+
+    # синтезируем строку программы
+    str_sintez = ''
+
+    Rezult = str_sub_repl + ' «' + str_sub_name_prog + '» ' + str_prog + '^' + str_sub_vozrast
 
     return Rezult
 
@@ -399,23 +433,17 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
             
     else:
 
-        #отделяем возрастную категорию
+        #анализируем и обрабатываем строку
         repl_str_prog = replace_in_prog(el_Pr_.split('|',1)[1]) 
+
         if '^' in repl_str_prog:
             vozrast_id = repl_str_prog.split('^')[-1]
         else:
             vozrast_id =''
 
-        # if '^' in repl_str_prog:
-        #     vozrast_id = repl_str_prog.split('^',1)[1]
-        #     repl_str_prog = repl_str_prog.split('^',1)[0]
-        #     str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + ' ' + vozrast_id +'\n'
-
-        # str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
-        # str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
-
-        str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + '|' + repl_str_prog + '^' + vozrast_id + '\n'
-        str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + '|' + repl_str_prog + '^' + vozrast_id + '\n'                
+        str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+        str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'     
+                   
         # doc
         paragraph = doc_.add_paragraph()
         paragraph.add_run(el_Pr_.split('|',1)[0] ).bold = True
