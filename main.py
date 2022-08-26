@@ -331,17 +331,16 @@ def replace_in_prog(str_prog):
             break
     
     # обработка капслока 
-    # str_prog = str_prog.title()
 
     # вырезаем из строки и вставляем в конец возрастной индекс !!!!!!!! двоит строки
-    # repl_vozr_sub = ''
-    # if not vozrast_ind=='':
-    #     # определяем строку для замены возрастной категории
-    #     if vozrast_ind[0] == '(':
-    #         repl_vozr_sub = vozrast_ind + ')'
-    #     else:
-    #         repl_vozr_sub = vozrast_ind 
-    #     str_prog = str_prog.replace(repl_vozr_sub, '') + '^' + vozrast_ind.replace('(', ' ').strip()
+    repl_vozr_sub = ''
+    if not vozrast_ind=='':
+        # определяем строку для замены возрастной категории
+        if vozrast_ind[0] == '(':
+            repl_vozr_sub = vozrast_ind + ')'
+        else:
+            repl_vozr_sub = vozrast_ind 
+        str_prog = str_prog.replace(repl_vozr_sub, '') + '^' + vozrast_ind.replace('(', ' ').strip()
 
     # убираем двойной пробел, пробел перед точкой, звездочку в 
     # скобках и двойные точки
@@ -400,29 +399,37 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
             
     else:
 
-        repl_str_prog = replace_in_prog(el_Pr_.split('|',1)[1]) 
-        
-        vozrast_id = ''
         #отделяем возрастную категорию
+        repl_str_prog = replace_in_prog(el_Pr_.split('|',1)[1]) 
         if '^' in repl_str_prog:
-            vozrast_id = repl_str_prog.split('^',1)[1]
-            repl_str_prog = repl_str_prog.split('^',1)[0]
-            str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + ' ' + vozrast_id +'\n'
+            vozrast_id = repl_str_prog.split('^')[-1]
+        else:
+            vozrast_id =''
 
+        # if '^' in repl_str_prog:
+        #     vozrast_id = repl_str_prog.split('^',1)[1]
+        #     repl_str_prog = repl_str_prog.split('^',1)[0]
+        #     str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + ' ' + vozrast_id +'\n'
 
-        str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
-        str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
+        # str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'
+        # str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + ' ' + repl_str_prog + '\n'                
+
+        str_prog_ = str_prog_ + el_Pr_.split('|',1)[0] + '|' + repl_str_prog + '^' + vozrast_id + '\n'
+        str_prog_N = str_prog_N + el_Pr_.split('|',1)[0] + '|' + repl_str_prog + '^' + vozrast_id + '\n'                
         # doc
         paragraph = doc_.add_paragraph()
         paragraph.add_run(el_Pr_.split('|',1)[0] ).bold = True
-        paragraph.add_run(' ' + repl_str_prog).bold = False
-        paragraph.add_run(vozrast_id).font.superscript = True
+        paragraph.add_run(' ' + repl_str_prog.split('^')[0]).bold = False
+        if not vozrast_id == '':
+            paragraph.add_run(vozrast_id).font.superscript = True
         paragraph.paragraph_format.space_before = Mm(0)
         paragraph.paragraph_format.space_after = Mm(0)
 
         paragraph = doc_N.add_paragraph()
         paragraph.add_run(el_Pr_.split('|',1)[0] ).bold = True
-        paragraph.add_run(' ' + repl_str_prog).bold = False
+        paragraph.add_run(' ' + repl_str_prog.split('^')[0]).bold = False
+        if not vozrast_id == '':
+            paragraph.add_run(vozrast_id).font.superscript = True
         paragraph.paragraph_format.space_before = Mm(0)
         paragraph.paragraph_format.space_after = Mm(0)
     return [str_prog_, str_prog_N]
@@ -839,7 +846,7 @@ def main():
      # сохраняем программы в файлы
     exp_prog(path_prog)
 
-    input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
+   # input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
     # print('w')   
 
 
