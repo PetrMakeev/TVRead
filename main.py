@@ -278,6 +278,7 @@ def replace_in_prog(str_prog):
         if str_prog.upper().find(el[0].upper()) > -1 :
             str_sub_repl = el[1]
             str_prog = str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
+            break
         else:
             str_sub_repl = ''
 
@@ -389,11 +390,27 @@ def replace_in_prog(str_prog):
                         replace('(*)', '').
                         replace('(S)', '')
                 )
+    # точка в начале строки
+    if len(str_prog)>0 and str_prog[0]=='.': str_prog = str_prog[1:]
+    str_prog = str_prog.strip()
+
 
     # синтезируем строку программы
     str_sintez = ''
+    if not str_sub_repl == '':
+        str_sintez = str_sintez + ' ' + str_sub_repl
 
-    Rezult = str_sub_repl + ' «' + str_sub_name_prog + '» ' + str_prog + '^' + str_sub_vozrast
+    if not str_sub_name_prog == '':
+        str_sintez = str_sintez + ' «' + str_sub_name_prog +'»'
+
+    if not str_prog == '':
+        str_sintez = str_sintez + ' ' + str_prog
+
+    if not str_sub_vozrast == '':
+        str_sintez = str_sintez + ' ^' + str_sub_vozrast
+
+
+    Rezult = str_sintez.strip()
 
     return Rezult
 
