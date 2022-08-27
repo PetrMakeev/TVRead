@@ -3,6 +3,7 @@ from operator import truediv
 import os
 import pathlib
 import copy
+from time import strptime
 #from turtle import clear
 from docx import Document
 from docx.shared import Pt
@@ -268,6 +269,8 @@ def txt_to_prog(path_prog):
 # str_sub_repl - строка замены 
 # str_sub_vozrast - строка возрастное ограничение
 # str_sub_name_prog - строка программы внутри кавычек елочкой
+# str_sub_ser - строка с сериями
+# str_sub_sez - строка с сезонами
 
 def replace_in_prog(str_prog):
 
@@ -303,8 +306,8 @@ def replace_in_prog(str_prog):
         else:
             str_sub_vozrast = ''
 
-    # меняем двойной апостроф на кавычки елочкой 
-    # и вырезаем строку внутри кавычек елочек
+    # меняем двойной апостроф на кавычки ёлочкой 
+    # и вырезаем строку внутри кавычек ёлочек
     find_kav = False
     find_i = len(str_prog)
     pos1 = -1
@@ -355,8 +358,117 @@ def replace_in_prog(str_prog):
     else:
         str_sub_name_prog = ''
 
-    
-    # обработка капслока 
+    # обработка сезонов и серий: 
+    # ищем и удаляем "N-й сезон"    
+    str_sub_sez = ''
+    if "СЕЗОН" in str_prog.upper():
+        pos_sez = str_prog.upper().find('СЕЗОН')
+        for i in range(pos_sez-2, 0, -1):
+            if not (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Й' or
+                    str_prog[i] == '-'         ):
+                str_sub_sez = str_prog[i+1: pos_sez+5]
+                str_prog = str_prog[:i] + ' ' + str_prog[pos_sez+5:]
+                break
+            elif (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Й' or
+                    str_prog[i] == '-'  ):
+                continue     
+            else: 
+                break
+
+    # ищем и удаляем "Сезон N"    
+    str_sub_sezN = ''
+    if "СЕЗОН" in str_prog.upper():
+        pos_sezN = str_prog.upper().find('СЕЗОН')
+        if pos_sezN+6<=len(str_prog):
+            for i in range(pos_sezN+6, len(str_prog), 1):
+                if not str_prog[i].isdigit() :
+                    str_sub_sezN = str_prog[pos_sezN: i]
+                    str_prog = str_prog[:pos_sezN]+ ' ' + str_prog[i:] 
+                    break
+                elif str_prog[i].isdigit() :
+                    continue     
+                else: 
+                    break
+
+    # ищем и удаляем "N-я серия"
+    str_sub_ser = ''
+    if "СЕРИЯ" in str_prog.upper():
+        pos_ser = str_prog.upper().find('СЕРИЯ')
+        for i in range(pos_ser-2, 0, -1):
+            if not str_prog[i].isdigit() :
+                str_sub_ser = str_sub_ser + str_prog[i+1: pos_ser+5]
+                str_prog = str_prog[:i] + ' ' + str_prog[pos_ser+5:]
+                break
+            elif str_prog[i].isdigit() :
+                continue           
+            else: 
+                break
+
+    # продолжаем искать и удалять "N-я - N-я - серии"
+    str_sub_ser1 = ''
+    str_sub_ser2 = ''
+
+    if "СЕРИИ" in str_prog.upper():
+        str_sub_ser1 = ''
+        pos_ser1 = str_prog.upper().find('СЕРИИ')
+        for i in range(pos_ser1-2, 0, -1):
+            
+            if not (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Я' or
+                    str_prog[i] == '-'         ):
+                str_sub_ser1 = str_prog[i+1: pos_ser1+5]
+                str_prog = str_prog[:i] + ' ' + str_prog[pos_ser1+5:]
+
+                if '-я' in str_prog:
+                    str_sub_ser2 = ''
+                    pos_ser2 = str_prog.upper().find('-Я') 
+                    for j in range(pos_ser2-2, 0, -1):
+
+                        if not (str_prog[j].isdigit() or
+                                str_prog[j].upper() == 'Я' or
+                                str_prog[j] == '-'         ):
+                            str_sub_ser2 = str_prog[j+1: pos_ser1+5]
+                            str_prog = str_prog[:j] + ' ' + str_prog[pos_ser1+5:]                                
+                            break
+
+                        elif (str_prog[i].isdigit() or
+                                str_prog[i].upper() == 'Я' or
+                                str_prog[i] == '-'  ):
+                            continue
+                        else: 
+                            break
+
+                break
+
+            elif (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Я' or
+                    str_prog[i] == '-'  ):
+                continue
+            else: 
+                break
+
+    # ищем и удаляем "Серия N"    
+    str_sub_serN = ''
+    if "СЕРИЯ" in str_prog.upper():
+        pos_serN = str_prog.upper().find('СЕРИЯ')
+        if pos_serN+6<=len(str_prog):
+            for i in range(pos_serN+6, len(str_prog), 1):
+                if not str_prog[i].isdigit() :
+                    str_sub_serN = str_prog[pos_serN: i]
+                    str_prog = str_prog[:pos_serN]+ ' ' + str_prog[i:] 
+                    break
+                elif str_prog[i].isdigit() :
+                    if i+1 == len(str_prog):
+                        str_sub_serN = str_prog[pos_serN: i+1]
+                        str_prog = str_prog[:pos_serN]+ ' ' + str_prog[i+1:] 
+                        break
+                    continue     
+                else: 
+                    break
+
+    str_sub_ser = str_sub_ser2 + str_sub_ser1
 
     # # убираем "г." и год
     pos_g = str_prog.find('г.')
@@ -384,9 +496,11 @@ def replace_in_prog(str_prog):
     # двойные точки
     str_prog = (str_prog.strip().
                         replace('  ', ' ').
+                        replace('  ', ' ').
                         replace(' .', '.').
                         replace('..', '.').
-                        replace('..','.').
+                        replace('..', '.').
+                        replace('..', '.').
                         replace('(*)', '').
                         replace('(S)', '')
                 )
