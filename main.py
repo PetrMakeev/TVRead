@@ -1,4 +1,5 @@
 import datetime
+from gettext import find
 from operator import truediv
 import os
 import pathlib
@@ -12,16 +13,18 @@ from docx.shared import Mm
 
 lst_Ch = []
 lst_Repl = []
+lst_Remove = []
 lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
+
 vozrast = []
 for i in range(0,20):
     vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
+
 god_film = []
 for i in range(1900,2050):
     god_film.append(str(i))
-
 
 doc1 = Document()
 doc2 = Document()
@@ -74,7 +77,7 @@ def timeDiv(strTime):
 
 
 # готовим список каналов и список замен
-def txt_to_list_Ch(path_prog):
+def txt_to_list(path_prog):
 
     global lst_txt
     global divH
@@ -91,7 +94,7 @@ def txt_to_list_Ch(path_prog):
             str_txt_ch = file_r.readlines()
     except:
         # cправочник каналов Channel.txt недоступен
-        print('Не найден файл со списком каналов!')
+        print('Не найден файл со списком каналов - Channel.txt!')
         exit()
     # заполняем справочник каналов 
     for i, el in enumerate(str_txt_ch):
@@ -105,15 +108,32 @@ def txt_to_list_Ch(path_prog):
             str_txt_rpl = file_r.readlines()
     except:
         # cправочник каналов Replace.txt недоступен
-        print('Не найден файл со списком каналов!')
+        print('Не найден файл со списком замен - Replace.txt!')
         exit()
 
     # заполняем справочник замен 
     for i, el in enumerate(str_txt_rpl):
         if not (el[0] == '#' or el=='\n'):
             lst_Repl.append(el[:-1].split('|'))
-            print('Считываем настройки - ' + progressSpin(i), end='\r')            
+            print('Считываем настройки - ' + progressSpin(i), end='\r')      
+
+    try:
+        # считываем файл с заменами Remove.txt
+        with open('Remove.txt', 'r') as file_r:
+            str_txt_rem = file_r.readlines()
+    except:
+        # cправочник каналов Replace.txt недоступен
+        print('Не найден файл со списком удалений - Remove.txt!')
+        exit()
+
+    # заполняем справочник удалений 
+    for i, el in enumerate(str_txt_rem):
+        if not (el[0] == '#' or el=='\n'):
+            lst_Remove.append(el[:-1])
+            print('Считываем настройки - ' + progressSpin(i), end='\r')      
+
     print('Считываем настройки - ВЫПОЛНЕНО!')   
+
 
 
 # готовим  списки телепрограмм по дням недели для наполнения
@@ -270,7 +290,9 @@ def txt_to_prog(path_prog):
 # str_sub_vozrast - строка возрастное ограничение
 # str_sub_name_prog - строка программы внутри кавычек елочкой
 # str_sub_ser - строка с сериями
-# str_sub_sez - строка с сезонами
+# str_sub_sez - строка с сезонами 
+# str_sub_rol - строка в ролях 
+# str_sub_rezh - строка режиссер
 
 def replace_in_prog(str_prog):
 
@@ -280,7 +302,7 @@ def replace_in_prog(str_prog):
         pos_repl = str_prog.upper().find(el[0].upper())
         if str_prog.upper().find(el[0].upper()) > -1 :
             str_sub_repl = el[1]
-            str_prog = str_prog.upper()[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
+            str_prog = str_prog[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
             break
         else:
             str_sub_repl = ''
@@ -397,12 +419,18 @@ def replace_in_prog(str_prog):
     if "СЕРИЯ" in str_prog.upper():
         pos_ser = str_prog.upper().find('СЕРИЯ')
         for i in range(pos_ser-2, 0, -1):
-            if not str_prog[i].isdigit() :
+            if not (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Я' or
+                    str_prog[i] == '-'            ):
                 str_sub_ser = str_sub_ser + str_prog[i+1: pos_ser+5]
                 str_prog = str_prog[:i] + ' ' + str_prog[pos_ser+5:]
                 break
             elif str_prog[i].isdigit() :
                 continue           
+            elif (str_prog[i].isdigit() or
+                    str_prog[i].upper() == 'Я' or
+                    str_prog[i] == '-'  ):
+                continue
             else: 
                 break
 
@@ -417,11 +445,11 @@ def replace_in_prog(str_prog):
             
             if not (str_prog[i].isdigit() or
                     str_prog[i].upper() == 'Я' or
-                    str_prog[i] == '-'         ):
+                    str_prog[i] == '-'            ):
                 str_sub_ser1 = str_prog[i+1: pos_ser1+5]
                 str_prog = str_prog[:i] + ' ' + str_prog[pos_ser1+5:]
 
-                if '-я' in str_prog:
+                if '-Я' in str_prog.upper():
                     str_sub_ser2 = ''
                     pos_ser2 = str_prog.upper().find('-Я') 
                     for j in range(pos_ser2-2, 0, -1):
@@ -429,8 +457,8 @@ def replace_in_prog(str_prog):
                         if not (str_prog[j].isdigit() or
                                 str_prog[j].upper() == 'Я' or
                                 str_prog[j] == '-'         ):
-                            str_sub_ser2 = str_prog[j+1: pos_ser1+5]
-                            str_prog = str_prog[:j] + ' ' + str_prog[pos_ser1+5:]                                
+                            str_sub_ser2 = str_prog[j+1: pos_ser2+2]
+                            str_prog = str_prog[:j] + ' ' + str_prog[pos_ser2+2:]                                
                             break
 
                         elif (str_prog[i].isdigit() or
@@ -448,6 +476,8 @@ def replace_in_prog(str_prog):
                 continue
             else: 
                 break
+
+    str_sub_ser = str_sub_ser2 + ' - ' + str_sub_ser1
 
     # ищем и удаляем "Серия N"    
     str_sub_serN = ''
@@ -468,8 +498,67 @@ def replace_in_prog(str_prog):
                 else: 
                     break
 
-    str_sub_ser = str_sub_ser2 + str_sub_ser1
+    # ищем и удаляем "Часть N"    
+    str_sub_chast = ''
+    pos_serCh = -1
+    if "ЧАСТЬ" in str_prog.upper():
+        pos_serCh = str_prog.upper().find('ЧАСТЬ')
+        if pos_serCh+6<=len(str_prog):
+            for i in range(pos_serCh+6, len(str_prog), 1):
+                if not (str_prog[i].isdigit() or
+                                str_prog[i].upper() == 'Я' or
+                                str_prog[i] == '-'         ) :
+                    str_sub_chast = str_prog[pos_serCh: i]
+                    str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i:] 
+                    
+                elif pos_serCh+6<=len(str_prog):
+                    if (str_prog[i].isdigit() or
+                                    str_prog[i].upper() == 'Я' or
+                                    str_prog[i] == '-'         ):
+                        if i+1 == len(str_prog):
+                            str_sub_chast = str_prog[pos_serCh: i+1]
+                            str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i+1:] 
+                            break
+                        elif i == len(str_prog)-2:
+                            str_sub_chast = str_prog[pos_serCh: i]
+                            str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i:] 
+                            break
+                        continue     
+                    else: 
+                        break
 
+    # ищем и удаляем "Выпуск N"    
+    str_sub_vyp = ''
+    pos_serVyp = -1
+    if "ВЫПУСК" in str_prog.upper():
+        pos_serVyp = str_prog.upper().find('ВЫПУСК')
+        if pos_serVyp+6<=len(str_prog):
+            for i in range(pos_serVyp+6, len(str_prog), 1):
+                if not str_prog[i].isdigit() :
+                    str_serVyp = str_prog[pos_serVyp: i]
+                    str_prog = str_prog[:pos_serVyp] + ' ' + str_prog[i:] 
+                    break
+                elif str_prog[i].isdigit() :
+                    if i+1 == len(str_prog):
+                        str_serVyp = str_prog[pos_serVyp: i+1]
+                        str_prog = str_prog[:pos_serVyp]+ ' ' + str_prog[i+1:] 
+                        break
+                    continue     
+                else: 
+                    break
+
+
+    str_sub_remove = ''
+    # ищем и удаляем слова по списку удаления
+    for i, el in enumerate(lst_Remove):
+        if el in str_prog:
+            pos_Rem = str_prog.upper().find(el.upper())
+            str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
+            str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
+            
+
+
+    # убираем года:
     # # убираем "г." и год
     pos_g = str_prog.find('г.')
     if pos_g > 6:
@@ -482,10 +571,25 @@ def replace_in_prog(str_prog):
     # убирем год без "г."
     for el_god in god_film:
         pos_g = str_prog.find(el_god)
-        if not pos_g<0:
-            str_prog = str_prog[:pos_g] + str_prog[pos_g+4:]
+        if not pos_g<0 :
+            if not str_prog[pos_g-1] == '-':
+                str_prog = str_prog[:pos_g] + str_prog[pos_g+4:]
 
 
+    # убираем в ролях и режиссера 
+    # ищем В ролях 
+    str_sub_rol = ''
+    if "В РОЛЯХ" in str_prog.upper():
+        pos_ser_rol = str_prog.upper().find('РОЛЯХ')
+        str_sub_rol = str_prog[pos_ser_rol:]
+        str_prog = str_prog[:pos_ser_rol-1]
+
+    # ищем режиссер 
+    str_sub_rezh = ''
+    if "РЕЖИССЕР" in str_prog.upper():
+        pos_ser_rech = str_prog.upper().find('РЕЖИССЕР')
+        str_sub_rezh = str_prog[pos_ser_rech:]
+        str_prog = str_prog[:pos_ser_rech-1]
 
 
     # убираем  мусор: 
@@ -494,16 +598,80 @@ def replace_in_prog(str_prog):
     # звездочку в скобках 
     # S в скобках
     # двойные точки
-    str_prog = (str_prog.strip().
-                        replace('  ', ' ').
-                        replace('  ', ' ').
-                        replace(' .', '.').
-                        replace('..', '.').
-                        replace('..', '.').
-                        replace('..', '.').
-                        replace('(*)', '').
-                        replace('(S)', '')
-                )
+    str_prog = str_prog.strip()
+                
+
+    if str_prog.find('(S)')>-1: 
+        str_prog = str_prog.replace('(S)', ' ')
+        
+    if str_prog.find(' , .')>-1: 
+        str_prog = str_prog.replace(' , .', '')
+
+    if str_prog.find('( ')>-1: 
+        str_prog = str_prog.replace('( ', '')
+
+    if str_prog.find(' (')>-1: 
+        str_prog = str_prog.replace('(', '')
+
+    if str_prog.find(' )')>-1: 
+        str_prog = str_prog.replace(' )', '')
+
+    if str_prog.find(' ,')>-1: 
+        str_prog = str_prog.replace(' ,', ',')
+
+    if str_prog.find('(, .)')>-1: 
+        str_prog = str_prog.replace('(, .)', '')
+
+    if str_prog.find('-.')>-1: 
+        str_prog = str_prog.replace('-.', ' ')
+
+    if str_prog.find('(, , )')>-1: 
+        str_prog = str_prog.replace('(, , )', ' ')
+        
+    if str_prog.find('(,.)')>-1: 
+        str_prog = str_prog.replace('(,.)', ' ')
+
+    if str_prog.find(',.')>-1: 
+        str_prog = str_prog.replace(',.', ' ')
+
+    if str_prog.find('(, )')>-1: 
+        str_prog = str_prog.replace('(, )', ' ')
+
+    if str_prog.find(').')>-1: 
+        str_prog = str_prog.replace(').', '')
+
+
+    if str_prog.find('  ')>-1: 
+        str_prog = str_prog.replace('  ', ' ')
+
+    if str_prog.find('  ')>-1: 
+        str_prog = str_prog.replace('  ', ' ')
+
+    if str_prog.find(' .')>-1: 
+        str_prog = str_prog.replace(' .', '.')
+
+    if str_prog.find('( )')>-1: 
+        str_prog = str_prog.replace('( )', ' ')
+
+    if str_prog.find(' .')>-1: 
+        str_prog = str_prog.replace(' .', '.')
+
+    if str_prog.find('..')>-1: 
+        str_prog = str_prog.replace('..', '.')
+
+    if str_prog.find('..')>-1: 
+        str_prog = str_prog.replace('..', '.')
+
+    if str_prog.find('..')>-1: 
+        str_prog = str_prog.replace('..', '.')
+
+    if str_prog.find('(*)')>-1: 
+        str_prog = str_prog.replace('(*)', '')
+
+    if str_prog.find('()')>-1: 
+        str_prog = str_prog.replace('()', '')
+
+             
     # точка в начале строки
     if len(str_prog)>0 and str_prog[0]=='.': str_prog = str_prog[1:]
     str_prog = str_prog.strip()
@@ -990,8 +1158,8 @@ def main():
     # сделать запрос поправки на часовой пояс, по умолчанию поставить 2 часа
     #read_divH()
 
-   # заполняем список сканируемых файлов каналов
-    txt_to_list_Ch(path_prog)
+   # считываем тхт файлы
+    txt_to_list(path_prog)
 
     # создаем заготовки списков программ по дням
     fill_Day()
