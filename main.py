@@ -287,7 +287,7 @@ def txt_to_prog(path_prog):
 def analiz_prog():
 
     progressInt = 0
-    
+
     # перебираем программы Понедельника
     for l, el_D in enumerate(lst_D1):
         for i, el_Pr in enumerate(el_D):
@@ -672,52 +672,9 @@ def replace_in_prog(str_prog):
     # убираем  мусор: 
     # двойной пробел
     # пробел перед точкой, 
-    # звездочку в скобках 
-    # S в скобках
     # двойные точки
     str_prog = str_prog.strip()
                 
-
-    if str_prog.find('(S)')>-1: 
-        str_prog = str_prog.replace('(S)', ' ')
-        
-    if str_prog.find(' , .')>-1: 
-        str_prog = str_prog.replace(' , .', '')
-
-    if str_prog.find('( ')>-1: 
-        str_prog = str_prog.replace('( ', '')
-
-    if str_prog.find(' (')>-1: 
-        str_prog = str_prog.replace('(', '')
-
-    if str_prog.find(' )')>-1: 
-        str_prog = str_prog.replace(' )', '')
-
-    if str_prog.find(' ,')>-1: 
-        str_prog = str_prog.replace(' ,', ',')
-
-    if str_prog.find('(, .)')>-1: 
-        str_prog = str_prog.replace('(, .)', '')
-
-    if str_prog.find('-.')>-1: 
-        str_prog = str_prog.replace('-.', ' ')
-
-    if str_prog.find('(, , )')>-1: 
-        str_prog = str_prog.replace('(, , )', ' ')
-        
-    if str_prog.find('(,.)')>-1: 
-        str_prog = str_prog.replace('(,.)', ' ')
-
-    if str_prog.find(',.')>-1: 
-        str_prog = str_prog.replace(',.', ' ')
-
-    if str_prog.find('(, )')>-1: 
-        str_prog = str_prog.replace('(, )', ' ')
-
-    if str_prog.find(').')>-1: 
-        str_prog = str_prog.replace(').', '')
-
-
     if str_prog.find('  ')>-1: 
         str_prog = str_prog.replace('  ', ' ')
 
@@ -727,12 +684,6 @@ def replace_in_prog(str_prog):
     if str_prog.find(' .')>-1: 
         str_prog = str_prog.replace(' .', '.')
 
-    if str_prog.find('( )')>-1: 
-        str_prog = str_prog.replace('( )', ' ')
-
-    if str_prog.find(' .')>-1: 
-        str_prog = str_prog.replace(' .', '.')
-
     if str_prog.find('..')>-1: 
         str_prog = str_prog.replace('..', '.')
 
@@ -742,11 +693,60 @@ def replace_in_prog(str_prog):
     if str_prog.find('..')>-1: 
         str_prog = str_prog.replace('..', '.')
 
-    if str_prog.find('(*)')>-1: 
-        str_prog = str_prog.replace('(*)', '')
+    # if str_prog.find('(S)')>-1: 
+    #     str_prog = str_prog.replace('(S)', ' ')
+        
+    # if str_prog.find(' , .')>-1: 
+    #     str_prog = str_prog.replace(' , .', '')
 
-    if str_prog.find('()')>-1: 
-        str_prog = str_prog.replace('()', '')
+    # if str_prog.find('( ')>-1: 
+    #     str_prog = str_prog.replace('( ', '')
+
+    # if str_prog.find(' (')>-1: 
+    #     str_prog = str_prog.replace('(', '')
+
+    # if str_prog.find(' )')>-1: 
+    #     str_prog = str_prog.replace(' )', '')
+
+    # if str_prog.find(' ,')>-1: 
+    #     str_prog = str_prog.replace(' ,', ',')
+
+    # if str_prog.find('(, .)')>-1: 
+    #     str_prog = str_prog.replace('(, .)', '')
+
+    # if str_prog.find('-.')>-1: 
+    #     str_prog = str_prog.replace('-.', ' ')
+
+    # if str_prog.find('(, , )')>-1: 
+    #     str_prog = str_prog.replace('(, , )', ' ')
+        
+    # if str_prog.find('(,.)')>-1: 
+    #     str_prog = str_prog.replace('(,.)', ' ')
+
+    # if str_prog.find(',.')>-1: 
+    #     str_prog = str_prog.replace(',.', ' ')
+
+    # if str_prog.find('(, )')>-1: 
+    #     str_prog = str_prog.replace('(, )', ' ')
+
+    # if str_prog.find(').')>-1: 
+    #     str_prog = str_prog.replace(').', '')
+
+
+
+    # if str_prog.find('( )')>-1: 
+    #     str_prog = str_prog.replace('( )', ' ')
+
+    # if str_prog.find(' .')>-1: 
+    #     str_prog = str_prog.replace(' .', '.')
+
+
+
+    # if str_prog.find('(*)')>-1: 
+    #     str_prog = str_prog.replace('(*)', '')
+
+    # if str_prog.find('()')>-1: 
+    #     str_prog = str_prog.replace('()', '')
 
              
     # точка в начале строки
@@ -1205,13 +1205,17 @@ def del_dubl_prog():
         for i, el in enumerate(el_prog):
             if i>0:
                 lst_el = el.split('|',1)[1]
+                lst_del = []
                 for j, el_seek in enumerate(el_prog):
                     if j>i:
                         lst_el_seek = el_seek.split('|',1)[1]
                         if lst_el==lst_el_seek:
                             # найден дубль в j для i
                             lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ', ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
-                            del lst_D1[k][j]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D1[k][n]    
 
             
     
