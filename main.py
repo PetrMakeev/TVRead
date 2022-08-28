@@ -283,7 +283,85 @@ def txt_to_prog(path_prog):
     print('Загружаем телепрограммы - ВЫПОЛНЕНО!')  
 
 
-                
+# перебираем списки программ для вызова анализа
+def analiz_prog():
+
+    progressInt = 0
+    
+    # перебираем программы Понедельника
+    for l, el_D in enumerate(lst_D1):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Вторника
+    for l, el_D in enumerate(lst_D2):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Среды
+    for l, el_D in enumerate(lst_D3):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Четверга
+    for l, el_D in enumerate(lst_D4):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Пятницы
+    for l, el_D in enumerate(lst_D5):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Субботы
+    for l, el_D in enumerate(lst_D6):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Вторника
+    for l, el_D in enumerate(lst_D7):
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+
+    print('Анализ телепрограмм - ВЫПОЛНЕНО')
+
+
+
+
+
+
 # делаем анализ строки программы 
 # проводим замены и синтезируем строку 
 # str_sub_repl - строка замены 
@@ -510,7 +588,7 @@ def replace_in_prog(str_prog):
                                 str_prog[i] == '-'         ) :
                     str_sub_chast = str_prog[pos_serCh: i]
                     str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i:] 
-                    
+                    break
                 elif pos_serCh+6<=len(str_prog):
                     if (str_prog[i].isdigit() or
                                     str_prog[i].upper() == 'Я' or
@@ -519,9 +597,9 @@ def replace_in_prog(str_prog):
                             str_sub_chast = str_prog[pos_serCh: i+1]
                             str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i+1:] 
                             break
-                        elif i == len(str_prog)-2:
-                            str_sub_chast = str_prog[pos_serCh: i]
-                            str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i:] 
+                        elif i+2 == len(str_prog):
+                            str_sub_chast = str_prog[pos_serCh: i+1]
+                            str_prog = str_prog[:pos_serCh]+ ' ' + str_prog[i+1:] 
                             break
                         continue     
                     else: 
@@ -546,16 +624,6 @@ def replace_in_prog(str_prog):
                     continue     
                 else: 
                     break
-
-
-    str_sub_remove = ''
-    # ищем и удаляем слова по списку удаления
-    for i, el in enumerate(lst_Remove):
-        if el in str_prog:
-            pos_Rem = str_prog.upper().find(el.upper())
-            str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
-            str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
-            
 
 
     # убираем года:
@@ -590,6 +658,15 @@ def replace_in_prog(str_prog):
         pos_ser_rech = str_prog.upper().find('РЕЖИССЕР')
         str_sub_rezh = str_prog[pos_ser_rech:]
         str_prog = str_prog[:pos_ser_rech-1]
+
+
+    # ищем и удаляем слова по списку удаления
+    str_sub_remove = ''
+    for i, el in enumerate(lst_Remove):
+        if el in str_prog:
+            pos_Rem = str_prog.upper().find(el.upper())
+            str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
+            str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
 
 
     # убираем  мусор: 
@@ -733,7 +810,7 @@ def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
     else:
 
         #анализируем и обрабатываем строку
-        repl_str_prog = replace_in_prog(el_Pr_.split('|',1)[1]) 
+        repl_str_prog = el_Pr_.split('|',1)[1]
 
         if '^' in repl_str_prog:
             vozrast_id = repl_str_prog.split('^')[-1]
@@ -801,7 +878,7 @@ def exp_prog(path_prog):
             str_prog1 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Понедельника - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Понедельника - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -830,7 +907,7 @@ def exp_prog(path_prog):
             str_prog2 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Вторника - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Вторника - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -860,7 +937,7 @@ def exp_prog(path_prog):
             str_prog3 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Среды - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Среды - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -888,7 +965,7 @@ def exp_prog(path_prog):
             str_prog4 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Четверга - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Четверга - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -916,7 +993,7 @@ def exp_prog(path_prog):
             str_prog5 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Пятницы - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Пятницы - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -944,7 +1021,7 @@ def exp_prog(path_prog):
             str_prog6 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Субботы - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Субботы - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
 
 
@@ -971,10 +1048,8 @@ def exp_prog(path_prog):
             str_prog7 = lst_tmp[0]
             str_progN = lst_tmp[1]
 
-            print(('Анализ телепрограмм Воскресенья - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
+            print(('Сохранение телепрограмм Воскресенья - ' + progressSpin(progressInt)).ljust(60, " ") , end='\r')
             progressInt +=  1
-
-    print('Анализ телепрограмм - ВЫПОЛНЕНО!'.ljust(60, " "))
 
     # сохраняем данные 
     try:
@@ -983,7 +1058,7 @@ def exp_prog(path_prog):
     except:
         print('Файл REZULT.REZ заблокирован для вывода списка каналов!')            
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -992,7 +1067,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 1.REZ заблокирован для вывода списка каналов!')            
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1001,7 +1076,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 2.REZ заблокирован для вывода списка каналов!')   
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1010,7 +1085,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 3.REZ заблокирован для вывода списка каналов!')    
                
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1019,7 +1094,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 4.REZ заблокирован для вывода списка каналов!')    
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1028,7 +1103,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 5.REZ заблокирован для вывода списка каналов!')  
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1037,7 +1112,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 6.REZ заблокирован для вывода списка каналов!')   
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1046,7 +1121,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 7.REZ заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     #doc
@@ -1055,7 +1130,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 1.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1063,7 +1138,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 2.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1071,7 +1146,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 3.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1079,7 +1154,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 1.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1087,7 +1162,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 1.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1095,7 +1170,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 5.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1103,7 +1178,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 7.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1111,7 +1186,7 @@ def exp_prog(path_prog):
     except:
         print('Файл 1.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ' + progressSpin(progressInt) , end='\r')
+    print('Сохранение результатов в файлы - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
     try:
@@ -1119,7 +1194,7 @@ def exp_prog(path_prog):
     except:
         print('Файл Rezult.docx заблокирован для вывода списка каналов!')     
 
-    print('Сохранение результатов - ВЫПОЛНЕНО!')
+    print('Сохранение результатов в файлы - ВЫПОЛНЕНО!')
 
        
 
@@ -1167,6 +1242,9 @@ def main():
     # считываем каналы 
     txt_to_prog(path_prog)
 
+    # analiz_prog()
+    analiz_prog()
+    
     # сводим дубликаты программ в одну строку
     del_dubl_prog()
 
