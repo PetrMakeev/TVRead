@@ -376,10 +376,12 @@ def replace_in_prog(str_prog):
 
     # определяем замену вырезаем из строки
     # и сохраняем в переменной str_sub_repl
+    str_sub_repl = ''
     for el in lst_Repl:
         pos_repl = str_prog.upper().find(el[0].upper())
         if str_prog.upper().find(el[0].upper()) > -1 :
-            str_sub_repl = el[1]
+            if str_sub_repl == '':
+                str_sub_repl = el[1]
             str_prog = str_prog[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
             break
         else:
@@ -406,57 +408,66 @@ def replace_in_prog(str_prog):
         else:
             str_sub_vozrast = ''
 
-    # меняем двойной апостроф на кавычки ёлочкой 
+
     # и вырезаем строку внутри кавычек ёлочек
-    find_kav = False
-    find_i = len(str_prog)
-    pos1 = -1
-    pos2 = -1
-    for i, str_sub in enumerate(str_prog):
-        if str_sub == '"' :
-            if i==0:
-                # кавычка в начале строки
-                pos1 = 0
-                continue
-            try:
-                if str_prog[i-1] == ' ':
-                    # кавычка перед словом
-                    pos1 = i
-                    continue
-            except:
-                pos1 = i
-                continue
-
-            try:
-                if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
-                    # кавычка после слова
-                    find_kav = True
-                    pos2 = i
-                    continue
-            except:
-                find_kav = True
-                pos2 = i
-                continue          
-            try:
-                if str_prog[i-1].isalpha():
-                    find_kav = True
-                    pos2 = i
-            except:
-                pos1 = i+1
-            try:
-                if str_prog[i+1].isalpha():
-                    pos1 = i
-            except:
-                find_kav = True
-                pos2 = i
-                              
-        if find_kav: break
-
-    if pos2>pos1:
-        str_sub_name_prog = str_prog[pos1+1:pos2]
+    pos1 = str_prog.find('«')
+    pos2 = str_prog.find('»')
+    if (pos1 > -1) and (pos2 > pos1):
+        str_temp = str_prog[pos1+1:pos2].lower()
+        str_sub_name_prog = str_temp[0].upper() + str_temp[1:]
         str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
     else:
-        str_sub_name_prog = ''
+        # меняем двойной апостроф на кавычки ёлочкой 
+        # и вырезаем строку внутри кавычек ёлочек
+        find_kav = False
+        find_i = len(str_prog)
+        pos1 = -1
+        pos2 = -1
+        for i, str_sub in enumerate(str_prog):
+            if str_sub == '"' :
+                if i==0:
+                    # кавычка в начале строки
+                    pos1 = 0
+                    continue
+                try:
+                    if str_prog[i-1] == ' ':
+                        # кавычка перед словом
+                        pos1 = i
+                        continue
+                except:
+                    pos1 = i
+                    continue
+
+                try:
+                    if str_prog[i+1] == ' ' or str_prog[i+1] == '.' :
+                        # кавычка после слова
+                        find_kav = True
+                        pos2 = i
+                        continue
+                except:
+                    find_kav = True
+                    pos2 = i
+                    continue          
+                try:
+                    if str_prog[i-1].isalpha():
+                        find_kav = True
+                        pos2 = i
+                except:
+                    pos1 = i+1
+                try:
+                    if str_prog[i+1].isalpha():
+                        pos1 = i
+                except:
+                    find_kav = True
+                    pos2 = i
+                                
+            if find_kav: break
+
+        if pos2>pos1:
+            str_sub_name_prog = deCapsLock(str_prog[pos1+1:pos2])
+            str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
+        else:
+            str_sub_name_prog = ''
 
     # обработка сезонов и серий: 
     # ищем и удаляем "N-й сезон"    
@@ -760,10 +771,11 @@ def replace_in_prog(str_prog):
         str_sintez = str_sintez + ' ' + str_sub_repl
 
     if not str_sub_name_prog == '':
-        str_sintez = str_sintez + ' «' + str_sub_name_prog +'»'
+        str_sintez = str_sintez + ' «' + deCapsLock(str_sub_name_prog) +'»'
 
     if not str_prog == '':
-        str_sintez = str_sintez + ' ' + str_prog
+        if str_sub_name_prog == '':
+            str_sintez = str_sintez + ' ' + str_prog
 
     if not str_sub_vozrast == '':
         str_sintez = str_sintez + ' ^' + str_sub_vozrast
@@ -773,6 +785,19 @@ def replace_in_prog(str_prog):
 
     return Rezult
 
+
+# проверяем и делаем де КапсЛок
+def deCapsLock(str_dcl):
+    fl_caps = True
+    lst_dcl = str_dcl.split(' ')
+    for el in lst_dcl:
+        for sub_el in el:
+            if sub_el.isalpha():
+                if not sub_el.istitle(): 
+                    fl_caps = False
+    if fl_caps:
+        str_dcl = str_dcl[0] + str_dcl[1:].lower()
+    return str_dcl
 
  
 # сохранение сведений о телепрограмме
@@ -1199,6 +1224,7 @@ def exp_prog(path_prog):
        
 
 def del_dubl_prog():
+    progressInt = 0
     
     # перебираем программы понедельника
     for k, el_prog in enumerate(lst_D1):
@@ -1217,8 +1243,132 @@ def del_dubl_prog():
                 for n in reversed(lst_del):
                     del lst_D1[k][n]    
 
-            
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы Вторника
+    for k, el_prog in enumerate(lst_D2):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D2[k][i] = lst_D2[k][i].split("|")[0] + ', ' + lst_D2[k][j].split('|')[0] + '|' + lst_D2[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D2[k][n]    
+
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы среда
+    for k, el_prog in enumerate(lst_D3):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D3[k][i] = lst_D3[k][i].split("|")[0] + ', ' + lst_D3[k][j].split('|')[0] + '|' + lst_D3[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D3[k][n]    
+
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+     # перебираем программы четверг
+    for k, el_prog in enumerate(lst_D4):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D4[k][i] = lst_D4[k][i].split("|")[0] + ', ' + lst_D4[k][j].split('|')[0] + '|' + lst_D4[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D4[k][n]    
+          
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы пятница
+    for k, el_prog in enumerate(lst_D5):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D5[k][i] = lst_D5[k][i].split("|")[0] + ', ' + lst_D5[k][j].split('|')[0] + '|' + lst_D5[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D5[k][n]    
     
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы суббота
+    for k, el_prog in enumerate(lst_D6):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D6[k][i] = lst_D3[k][i].split("|")[0] + ', ' + lst_D6[k][j].split('|')[0] + '|' + lst_D6[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D6[k][n]    
+
+    print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    # перебираем программы воскресенье
+    for k, el_prog in enumerate(lst_D7):
+        for i, el in enumerate(el_prog):
+            if i>0:
+                lst_el = el.split('|',1)[1]
+                lst_del = []
+                for j, el_seek in enumerate(el_prog):
+                    if j>i:
+                        lst_el_seek = el_seek.split('|',1)[1]
+                        if lst_el==lst_el_seek:
+                            # найден дубль в j для i
+                            lst_D7[k][i] = lst_D7[k][i].split("|")[0] + ', ' + lst_D7[k][j].split('|')[0] + '|' + lst_D7[k][i].split("|")[1]
+                            lst_del.append(j)
+
+                for n in reversed(lst_del):
+                    del lst_D7[k][n]    
+
+    print('Собираем дубликаты программ - ВЫПОНЕНО!' )
+    progressInt +=  1
+
+
+
+
 
 # основное тело программы
 def main():
@@ -1255,7 +1405,7 @@ def main():
      # сохраняем программы в файлы
     exp_prog(path_prog)
 
-   # input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
+    input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
     # print('w')   
 
 
