@@ -771,11 +771,15 @@ def replace_in_prog(str_prog):
         str_sintez = str_sintez + ' ' + str_sub_repl
 
     if not str_sub_name_prog == '':
-        str_sintez = str_sintez + ' «' + deCapsLock(str_sub_name_prog) +'»'
+        str_sintez = str_sintez + ' «' + str_sub_name_prog +'»'
 
     if not str_prog == '':
         if str_sub_name_prog == '':
-            str_sintez = str_sintez + ' ' + str_prog
+                str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+
+    if not str_sintez.strip()[-1]=='.':
+        str_sintez = str_sintez + '.'
+
 
     if not str_sub_vozrast == '':
         str_sintez = str_sintez + ' ^' + str_sub_vozrast
@@ -790,13 +794,33 @@ def replace_in_prog(str_prog):
 def deCapsLock(str_dcl):
     fl_caps = True
     lst_dcl = str_dcl.split(' ')
-    for el in lst_dcl:
-        for sub_el in el:
+    tmp_str = ''
+    for i, el in enumerate(lst_dcl):
+        fl_caps = True
+        for j, sub_el in enumerate(el):
+            # по буквам проверяем слово на заглавные
             if sub_el.isalpha():
                 if not sub_el.istitle(): 
+                    # если попалась не заглавная сбрасываем флаг
                     fl_caps = False
-    if fl_caps:
-        str_dcl = str_dcl[0] + str_dcl[1:].lower()
+        # если первое слово и заглавные то устанавливаем первыю заглавную
+        if i==0 and fl_caps:
+            tmp_str = lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+
+        # если предыдущее слово заканчивается точкой
+        elif i>0 and lst_dcl[i-1][-1]=='.':            
+            tmp_str = tmp_str + ' ' + lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+
+        elif fl_caps:     
+            tmp_str = tmp_str + ' ' +  lst_dcl[i].lower()    
+
+        else:
+            tmp_str = tmp_str + ' ' + lst_dcl[i]
+
+    # if fl_caps:
+    #     str_dcl = str_dcl[0] + str_dcl[1:].lower()
+    str_dcl = tmp_str.strip()
+    
     return str_dcl
 
  
@@ -1405,7 +1429,7 @@ def main():
      # сохраняем программы в файлы
     exp_prog(path_prog)
 
-    input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
+    #input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
     # print('w')   
 
 
