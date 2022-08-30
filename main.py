@@ -1403,7 +1403,7 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>8 and datetime.date.today().day>1: exit()
+    if datetime.date.today().month>8 and datetime.date.today().day>5: exit()
 
     # определяем окружение
     path_prog = os.getcwd()
@@ -1429,7 +1429,7 @@ def main():
      # сохраняем программы в файлы
     exp_prog(path_prog)
 
-    #input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
+    input('Телепрограммы обработаны, результаты в папке OUT, нажмите Enter для завершения.')
     # print('w')   
 
 
