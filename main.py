@@ -14,6 +14,7 @@ from docx.shared import Mm
 lst_Ch = []
 lst_Repl = []
 lst_Remove = []
+lst_CapsWord = []
 lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
@@ -63,16 +64,20 @@ def set_scr():
 
 # поправка на часовой пояс
 def timeDiv(strTime):
-    if ':' in strTime:
-        strHourN = int(strTime.split(':')[0]) + divH
+    if strTime.find(':')>-1 or  strTime.find('.')>-1:
+        if ':' in strTime:
+            strHourN = int(strTime.split(':')[0]) + divH
+        else:
+            strHourN = int(strTime.split('.')[0]) + divH
+        if strHourN>23 : strHourN = strHourN - 24
+        if strHourN<0  : strHourN = 24 - strHourN 
+        if strHourN<10:
+            Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
+        else:
+            Rezult = str(strHourN) + '.' + strTime[-2:]
     else:
-        strHourN = int(strTime.split('.')[0]) + divH
-    if strHourN>23 : strHourN = strHourN - 24
-    if strHourN<0  : strHourN = 24 - strHourN 
-    if strHourN<10:
-        Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
-    else:
-        Rezult = str(strHourN) + '.' + strTime[-2:]
+        Rezult = strTime
+
     return Rezult
 
 
@@ -99,7 +104,7 @@ def txt_to_list(path_prog):
     # заполняем справочник каналов 
     for i, el in enumerate(str_txt_ch):
         if not (el[0] == '#' or el=='\n'):
-            lst_Ch.append(el[:-1].split('|'))
+            lst_Ch.append(el.replace('\n','').split('|'))
             print('Считываем настройки - ' + progressSpin(i), end='\r')
 
     try:
@@ -114,7 +119,7 @@ def txt_to_list(path_prog):
     # заполняем справочник замен 
     for i, el in enumerate(str_txt_rpl):
         if not (el[0] == '#' or el=='\n'):
-            lst_Repl.append(el[:-1].split('|'))
+            lst_Repl.append(el.replace('\n','').split('|'))
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
     try:
@@ -129,8 +134,24 @@ def txt_to_list(path_prog):
     # заполняем справочник удалений 
     for i, el in enumerate(str_txt_rem):
         if not (el[0] == '#' or el=='\n'):
-            lst_Remove.append(el[:-1])
+            lst_Remove.append(el.replace('\n',''))
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
+
+    try:
+        # считываем файл с исключениями КапсЛока.txt
+        with open('CapsWord.txt', 'r') as file_r:
+            str_txt_cpsl = file_r.readlines()
+    except:
+        # cправочник каналов CapsWord.txt недоступен
+        print('Не найден файл со списком удалений - CapsWord.txt!')
+        exit()
+
+    # заполняем справочник удалений 
+    for i, el in enumerate(str_txt_cpsl):
+        if not (el[0] == '#' or el=='\n'):
+            lst_CapsWord.append(el.replace('\n',''))
+            print('Считываем настройки - ' + progressSpin(i), end='\r')      
+
 
     print('Считываем настройки - ВЫПОЛНЕНО!')   
 
@@ -195,6 +216,8 @@ def txt_to_prog(path_prog):
         name_Pr = ''
     
         # обрабатываем список с программой из файла источника 
+        fl_merge = False
+        fl_merge2 = False
         for str_line in str_txt:
             # проверяем первый знак 
             str_tmp = str_line[:-1].strip()
@@ -213,23 +236,37 @@ def txt_to_prog(path_prog):
                 # отделяем время программы от названия программы
                 if len(str_sub_lineD)>0:
                     str_sub_lineD = str_tmp.split(' ',1)
-
-                    if str_sub_lineD[0][0].isalpha() or name_Pr=='None':
+                    
+                    # если начинается строка с буквы или кавычки
+                    if str_sub_lineD[0][0].isalpha() or str_sub_lineD[0][0] == '"'  or str_sub_lineD[0][0] == '«'  or name_Pr=='None' :
+                        if fl_merge:
+                            fl_merge2 = True
                         fl_merge = True
                     else:
                         fl_merge = False
+                        fl_merge2 = False
                         
+                    # если второе объединение строки то соединеям |  а не   пробелом
                     if fl_merge:
-                        name_Pr = name_Pr + ' ' + str_tmp
+                        if fl_merge2:
+                            name_Pr = name_Pr + ' ' + str_tmp
+                        else:
+                            name_Pr = name_Pr + '|' + str_tmp
                     else:
-                        name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
+                        if len(str_sub_lineD)==1:
+                            name_Pr = timeDiv(str_sub_lineD[0])
+                        else:    
+                            name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
     
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D1[i][-1] = lst_D1[i][-1] + ' ' + str_tmp
+                                    if fl_merge2:
+                                        lst_D1[i][-1] = lst_D1[i][-1] + ' ' + str_tmp
+                                    else:
+                                        lst_D1[i][-1] = name_Pr
                                 else:
                                     lst_D1[i].append(name_Pr.strip())                            
 
@@ -237,7 +274,7 @@ def txt_to_prog(path_prog):
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D2[i][-1] = lst_D2[i][-1] + ' ' + str_tmp
+                                    lst_D2[i][-1] = lst_D2[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D2[i].append(name_Pr.strip())                            
 
@@ -245,7 +282,7 @@ def txt_to_prog(path_prog):
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D3[i][-1] = lst_D3[i][-1] + ' ' + str_tmp
+                                    lst_D3[i][-1] = lst_D3[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D3[i].append(name_Pr.strip())                            
 
@@ -253,7 +290,7 @@ def txt_to_prog(path_prog):
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D4[i][-1] = lst_D4[i][-1] + ' ' + str_tmp
+                                    lst_D4[i][-1] = lst_D4[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D4[i].append(name_Pr.strip())                            
 
@@ -261,7 +298,7 @@ def txt_to_prog(path_prog):
                          for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D5[i][-1] = lst_D5[i][-1] + ' ' + str_tmp
+                                    lst_D5[i][-1] = lst_D5[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D5[i].append(name_Pr.strip())                            
 
@@ -269,7 +306,7 @@ def txt_to_prog(path_prog):
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D6[i][-1] = lst_D6[i][-1] + ' ' + str_tmp
+                                    lst_D6[i][-1] = lst_D6[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D6[i].append(name_Pr.strip())                            
 
@@ -277,7 +314,7 @@ def txt_to_prog(path_prog):
                         for i, el in enumerate(lst_Ch):
                             if el[1]==name_Ch:
                                 if fl_merge:
-                                    lst_D7[i][-1] = lst_D7[i][-1] + ' ' + str_tmp
+                                    lst_D7[i][-1] = lst_D7[i][-1] + '|' + str_tmp
                                 else:
                                     lst_D7[i].append(name_Pr.strip())                            
     print('Загружаем телепрограммы - ВЫПОЛНЕНО!')  
@@ -412,11 +449,8 @@ def replace_in_prog(str_prog):
     # и вырезаем строку внутри кавычек ёлочек
     pos1 = str_prog.find('«')
     pos2 = str_prog.find('»')
-    if (pos1 > -1) and (pos2 > pos1):
-        str_temp = str_prog[pos1+1:pos2].lower()
-        str_sub_name_prog = str_temp[0].upper() + str_temp[1:]
-        str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
-    else:
+    str_sub_name_prog = ''
+    if not ((pos1 > -1) and (pos2 > pos1)):
         # меняем двойной апостроф на кавычки ёлочкой 
         # и вырезаем строку внутри кавычек ёлочек
         find_kav = False
@@ -793,29 +827,63 @@ def replace_in_prog(str_prog):
 # проверяем и делаем де КапсЛок
 def deCapsLock(str_dcl):
     fl_caps = True
+    fl_CapsWord = False
     lst_dcl = str_dcl.split(' ')
     tmp_str = ''
     for i, el in enumerate(lst_dcl):
+
+        #проверяем исключения по Капслоку
+        for el_cpsl in lst_CapsWord:
+            pos_cpsl = el.upper().find(el_cpsl.upper())
+            if pos_cpsl>-1:
+                if pos_cpsl==0:
+                    if len(tmp_str.strip())>0:
+                        tmp_str = tmp_str + ' ' + el_cpsl + el[len(el_cpsl):]    
+                    else:
+                        tmp_str = el_cpsl
+                else:
+                    if len(tmp_str.strip())>0:
+                        tmp_str = tmp_str + ' ' + el_cpsl + el[len(el_cpsl)+pos_cpsl:]   
+                    else:
+                        tmp_str = el[:pos_cpsl] + el_cpsl + el[len(el_cpsl)+pos_cpsl:]
+                fl_CapsWord = True
+                break
+            else:
+                fl_CapsWord = False
+
+        # если попалось исключение по CapsWord берем следующее слово
+        if fl_CapsWord: 
+            continue
+
         fl_caps = True
+        # по буквам проверяем слово на заглавные
         for j, sub_el in enumerate(el):
-            # по буквам проверяем слово на заглавные
-            if sub_el.isalpha():
+            if sub_el.isalpha() and fl_caps:
                 if not sub_el.istitle(): 
                     # если попалась не заглавная сбрасываем флаг
                     fl_caps = False
+
         # если первое слово и заглавные то устанавливаем первыю заглавную
         if i==0 and fl_caps:
-            tmp_str = lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+            if lst_dcl[i][0].isalpha():
+                tmp_str = lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+            elif len(lst_dcl[i])>1:
+                tmp_str = lst_dcl[i][:2].upper()  + lst_dcl[i][2:].lower()
+            else:
+                tmp_str = lst_dcl[i]
+            continue
+
+        # если слово начинается с кавычек 
+        if i>0 and lst_dcl[i][0]== '«' and fl_caps:
+            tmp_str = lst_dcl[i][:1].upper()  + lst_dcl[i][2:].lower()
 
         # если предыдущее слово заканчивается точкой
         elif i>0 and lst_dcl[i-1][-1]=='.':            
-            tmp_str = tmp_str + ' ' + lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+            tmp_str = tmp_str + ' ' + lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower() 
 
-        elif fl_caps:     
-            tmp_str = tmp_str + ' ' +  lst_dcl[i].lower()    
-
+        # все прописные
         else:
-            tmp_str = tmp_str + ' ' + lst_dcl[i]
+            tmp_str = tmp_str + ' ' + lst_dcl[i].lower()
 
     # if fl_caps:
     #     str_dcl = str_dcl[0] + str_dcl[1:].lower()
@@ -1403,7 +1471,9 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>8 and datetime.date.today().day>5: exit()
+    if datetime.date.today().month>8 and datetime.date.today().day>12: 
+        input('Закончился демо-режим программы, нажмите Enter для завершения.')
+        exit()
 
     # определяем окружение
     path_prog = os.getcwd()
