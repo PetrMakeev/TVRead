@@ -1,5 +1,4 @@
 import datetime
-from deCapsLock import *
 from Replace_in_prog import *
 from gettext import find
 from operator import truediv
@@ -330,7 +329,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -340,7 +339,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -350,7 +349,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -360,7 +359,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -370,7 +369,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -380,7 +379,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -390,7 +389,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1], lst_Repl, lst_CapsWord, lst_Remove)
+               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ВЫПОЛНЕНО')
 

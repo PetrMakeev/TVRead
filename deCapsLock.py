@@ -1,5 +1,7 @@
+from main import lst_CapsWord
+
 # проверяем и делаем деКапсЛок
-def deCapsLock(str_dcl, lst_CapsWord):
+def deCapsLock(str_dcl):
     str_dcl = str_dcl.strip()
     fl_caps = True
     fl_CapsWord = False

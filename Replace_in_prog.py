@@ -1,3 +1,6 @@
+from deCapsLock import deCapsLock
+from main import vozrast, god_film, lst_Repl, lst_Remove
+
 # делаем анализ строки программы 
 # проводим замены и синтезируем строку 
 # str_sub_repl - строка замены 
@@ -8,11 +11,7 @@
 # str_sub_rol - строка в ролях 
 # str_sub_rezh - строка режиссер
 
-from deCapsLock import *
-from main import vozrast, god_film
-
-
-def replace_in_prog(str_prog, lst_Repl, lst_CapsWord, lst_Remove):
+def replace_in_prog(str_prog):
 
     # определяем замену вырезаем из строки
     # и сохраняем в переменной str_sub_repl
@@ -101,7 +100,7 @@ def replace_in_prog(str_prog, lst_Repl, lst_CapsWord, lst_Remove):
             if find_kav: break
 
         if pos2>pos1:
-            str_sub_name_prog = deCapsLock(str_prog[pos1+1:pos2], lst_CapsWord)
+            str_sub_name_prog = deCapsLock(str_prog[pos1+1:pos2])
             str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
         else:
             str_sub_name_prog = ''
@@ -412,7 +411,7 @@ def replace_in_prog(str_prog, lst_Repl, lst_CapsWord, lst_Remove):
 
     if not str_prog == '':
         if str_sub_name_prog == '':
-                str_sintez = str_sintez + ' ' + deCapsLock(str_prog, lst_CapsWord)
+                str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
 
     if not str_sintez.strip()[-1]=='.':
         str_sintez = str_sintez + '.'
