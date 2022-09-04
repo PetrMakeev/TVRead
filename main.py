@@ -826,6 +826,7 @@ def replace_in_prog(str_prog):
 
 # проверяем и делаем де КапсЛок
 def deCapsLock(str_dcl):
+    str_dcl = str_dcl.strip()
     fl_caps = True
     fl_CapsWord = False
     lst_dcl = str_dcl.split(' ')
@@ -1430,7 +1431,7 @@ def del_dubl_prog():
                         lst_el_seek = el_seek.split('|',1)[1]
                         if lst_el==lst_el_seek:
                             # найден дубль в j для i
-                            lst_D6[k][i] = lst_D3[k][i].split("|")[0] + ', ' + lst_D6[k][j].split('|')[0] + '|' + lst_D6[k][i].split("|")[1]
+                            lst_D6[k][i] = lst_D6[k][i].split("|")[0] + ', ' + lst_D6[k][j].split('|')[0] + '|' + lst_D6[k][i].split("|")[1]
                             lst_del.append(j)
 
                 for n in reversed(lst_del):
