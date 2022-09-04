@@ -832,6 +832,16 @@ def deCapsLock(str_dcl):
     tmp_str = ''
     for i, el in enumerate(lst_dcl):
 
+        # если первое слово и заглавные то устанавливаем первыю заглавную
+        if i==0 and fl_caps:
+            if lst_dcl[i][0].isalpha():
+                tmp_str = lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
+            elif len(lst_dcl[i])>1:
+                tmp_str = lst_dcl[i][:2].upper()  + lst_dcl[i][2:].lower()
+            else:
+                tmp_str = lst_dcl[i]
+            continue
+
         #проверяем исключения по Капслоку
         for el_cpsl in lst_CapsWord:
             pos_cpsl = el.upper().find(el_cpsl.upper())
@@ -863,18 +873,9 @@ def deCapsLock(str_dcl):
                     # если попалась не заглавная сбрасываем флаг
                     fl_caps = False
 
-        # если первое слово и заглавные то устанавливаем первыю заглавную
-        if i==0 and fl_caps:
-            if lst_dcl[i][0].isalpha():
-                tmp_str = lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower()
-            elif len(lst_dcl[i])>1:
-                tmp_str = lst_dcl[i][:2].upper()  + lst_dcl[i][2:].lower()
-            else:
-                tmp_str = lst_dcl[i]
-            continue
 
         # если слово начинается с кавычек 
-        if i>0 and lst_dcl[i][0]== '«' and fl_caps:
+        if i>0 and (lst_dcl[i][0]== '«' or lst_dcl[i][0]== '\'') and fl_caps:
             tmp_str = lst_dcl[i][:1].upper()  + lst_dcl[i][2:].lower()
 
         # если предыдущее слово заканчивается точкой
