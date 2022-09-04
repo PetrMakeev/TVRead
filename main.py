@@ -1,5 +1,5 @@
 import datetime
-from Replace_in_prog import *
+from ReplaceInProg import *
 from gettext import find
 from operator import truediv
 import os
