@@ -841,6 +841,9 @@ def deCapsLock(str_dcl):
     tmp_str = ''
     for i, el in enumerate(lst_dcl):
 
+        if lst_dcl[i]=='':
+            continue
+
         # если первое слово и заглавные то устанавливаем первыю заглавную
         if i==0 and fl_caps:
             if lst_dcl[i][0].isalpha():
@@ -881,6 +884,7 @@ def deCapsLock(str_dcl):
                 if not sub_el.istitle(): 
                     # если попалась не заглавная сбрасываем флаг
                     fl_caps = False
+                    break
 
 
         # если слово начинается с кавычек 
@@ -888,8 +892,11 @@ def deCapsLock(str_dcl):
             tmp_str = tmp_str + ' ' +  lst_dcl[i][0].upper()  + lst_dcl[i][1].upper()  + lst_dcl[i][2:].lower()
 
         # если предыдущее слово заканчивается точкой
-        elif i>0 and lst_dcl[i-1][-1]=='.':            
-            tmp_str = tmp_str + ' ' + lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower() 
+        elif i>0 and (not lst_dcl[i-1]==''):
+            if lst_dcl[i-1][-1]=='.':            
+                tmp_str = tmp_str + ' ' + lst_dcl[i][0].upper()  + lst_dcl[i][1:].lower() 
+            else:
+                tmp_str = tmp_str + ' ' + lst_dcl[i].lower() 
 
         # все прописные
         else:
@@ -1460,10 +1467,7 @@ def replace_in_prog(str_prog):
         # синтезируем строку программы
         str_sintez = ''
         if not str_sub_repl == '':
-            if str_sintez == '':
-                str_sintez =  str_sub_repl
-            else:
-                str_sintez = str_sintez + ' ' + str_sub_repl
+            str_sintez =  str_sub_repl
       
 
         if not str_sub_name_prog == '':
@@ -1473,8 +1477,8 @@ def replace_in_prog(str_prog):
             str_sintez =  deCapsLock(str_prog)
 
 
-        if not str_sintez.strip()[-1]=='.':
-            str_sintez = str_sintez + '.'
+        # if not str_sintez.strip()[-1]=='.':
+        #     str_sintez = str_sintez + '.'
 
 
         if not str_sub_vozrast == '':
@@ -1486,7 +1490,10 @@ def replace_in_prog(str_prog):
 
     else:
         # найдено стоп слово
-        Rezult = deCapsLock(str_prog) + ' ^' + str_sub_vozrast
+        if not str_sub_vozrast == '':
+            Rezult = deCapsLock(str_prog) + ' ^' + str_sub_vozrast
+        else:
+             Rezult = deCapsLock(str_prog)
 
     return Rezult
 
