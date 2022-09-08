@@ -45,6 +45,16 @@ def id_to_name_Ch(name_Ch_id):
             Rezult = name_Ch_id
     return Rezult
 
+# возращаем надо делать корректировку времени или нет
+def fl_to_name_Ch(name_Ch_id):
+    Rezult = False
+    for el in lst_Ch:
+        if el[0]==name_Ch_id: 
+            Rezult = (el[2]=='1')
+            break
+    return Rezult
+
+# отрисовка прогресс спИна
 def progressSpin(i):
     tmp_i = i%4
     if tmp_i == 0: tmp_s='-'
@@ -62,21 +72,33 @@ def set_scr():
  
 
 # поправка на часовой пояс
-def timeDiv(strTime):
-    if strTime.find(':')>-1 or  strTime.find('.')>-1:
-        if ':' in strTime:
-            strHourN = int(strTime.split(':')[0]) + divH
+def timeDiv(strTime, fl_change):
+    if fl_change:
+        if strTime.find(':')>-1 or  strTime.find('.')>-1:
+            if ':' in strTime:
+                strHourN = int(strTime.split(':')[0]) + divH
+            else:
+                strHourN = int(strTime.split('.')[0]) + divH
+            if strHourN>23 : strHourN = strHourN - 24
+            if strHourN<0  : strHourN = 24 - strHourN 
+            if strHourN<10:
+                Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
+            else:
+                Rezult = str(strHourN) + '.' + strTime[-2:]
         else:
-            strHourN = int(strTime.split('.')[0]) + divH
-        if strHourN>23 : strHourN = strHourN - 24
-        if strHourN<0  : strHourN = 24 - strHourN 
-        if strHourN<10:
-            Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
-        else:
-            Rezult = str(strHourN) + '.' + strTime[-2:]
+            Rezult = strTime
     else:
-        Rezult = strTime
-
+        if strTime.find(':')>-1 or  strTime.find('.')>-1:
+            if ':' in strTime:
+                strHourN = int(strTime.split(':')[0]) 
+            else:
+                strHourN = int(strTime.split('.')[0]) 
+            if strHourN<10:
+                Rezult = '0' + str(strHourN) + '.' + strTime[-2:]
+            else:
+                Rezult = str(strHourN) + '.' + strTime[-2:]
+        else:
+            Rezult = strTime
     return Rezult
 
 
@@ -92,22 +114,23 @@ def txt_to_list(path_prog):
         if name_files_in[-3:]=='txt':
             lst_txt.append(path_prog + '\\in\\' + name_files_in)
 
+    # считываем файл с телеканалами Chanenl.txt
     try:
-        # считываем файл с телеканалами Chanenl.txt
         with open('Channel.txt', 'r') as file_r:
             str_txt_ch = file_r.readlines()
     except:
         # cправочник каналов Channel.txt недоступен
         print('Не найден файл со списком каналов - Channel.txt!')
         exit()
+
     # заполняем справочник каналов 
     for i, el in enumerate(str_txt_ch):
         if not (el[0] == '#' or el.strip()==''):
             lst_Ch.append(el.replace('\n','').split('|'))
             print('Считываем настройки - ' + progressSpin(i), end='\r')
 
+    # считываем файл с заменами Replace.txt
     try:
-        # считываем файл с заменами Replace.txt
         with open('Replace.txt', 'r') as file_r:
             str_txt_rpl = file_r.readlines()
     except:
@@ -267,9 +290,9 @@ def txt_to_prog(path_prog):
                             name_Pr = name_Pr + '|' + str_tmp
                     else:
                         if len(str_sub_lineD)==1:
-                            name_Pr = timeDiv(str_sub_lineD[0])
+                            name_Pr = timeDiv(str_sub_lineD[0], fl_to_name_Ch(name_Ch_id))
                         else:    
-                            name_Pr = timeDiv(str_sub_lineD[0]) + '|' + str_sub_lineD[1] 
+                            name_Pr = timeDiv(str_sub_lineD[0], fl_to_name_Ch(name_Ch_id)) + '|' + str_sub_lineD[1] 
     
                     # собираем список [канал, [программа]] 
                     if name_Day == 'ПОНЕДЕЛЬНИК':
