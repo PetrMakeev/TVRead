@@ -949,6 +949,7 @@ def del_dubl_prog():
     for k, el_prog in enumerate(lst_D1):
         for i, el in enumerate(el_prog):
             if i>0:
+                # собираем дубликаты одинаковых строк
                 lst_el = el.split('|',1)[1]
                 lst_del = []
                 for j, el_seek in enumerate(el_prog):
@@ -959,8 +960,19 @@ def del_dubl_prog():
                             lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ', ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
                             lst_del.append(j)
 
+                # удаляем собранные дубликаты в обратном порядке
                 for n in reversed(lst_del):
                     del lst_D1[k][n]    
+
+                # собираем дубрикаты названий в ковычках
+                # сравнение внутри кавычек до первой точки
+
+
+
+
+
+
+                
 
     print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -1498,6 +1510,8 @@ def replace_in_prog(str_prog):
 
         if str_sintez == '':
             str_sintez =  deCapsLock(str_prog)
+        else:
+            str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
 
 
         # if not str_sintez.strip()[-1]=='.':
