@@ -70,6 +70,24 @@ def set_scr():
     print('Макеев Петр тел. 8-912-34-161-34 ')
     print('-----------------------------------------------')
  
+# возвращаем строку от первой кавычки до точки
+def str_kav_dot(str_prog):
+    # определяем в строке позиции кавычки ёлочки
+    pos1 = str_prog.find('«')
+    pos2 = str_prog.find('»')
+    Rezult = ''
+
+    if (pos1 > -1) and (pos2 > pos1+2) :
+        # если кавычки найдены ищем точку 
+        pos3 = str_prog.find('.', pos1, pos2)
+        if pos3 > -1:
+            # точка найдена - вырезаем строку
+            Rezult = str_prog[pos1:pos3]
+
+    return Rezult
+
+
+
 
 # поправка на часовой пояс
 def timeDiv(strTime, fl_change):
@@ -954,25 +972,34 @@ def del_dubl_prog():
                 lst_del = []
                 for j, el_seek in enumerate(el_prog):
                     if j>i:
-                        lst_el_seek = el_seek.split('|',1)[1]
+                        lst_el_seek = el_seek.split('|', 1)[1]
                         if lst_el==lst_el_seek:
                             # найден дубль в j для i
                             lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ', ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
                             lst_del.append(j)
 
+
+                # # собираем дубрикаты названий в ковычках
+                # # сравнение внутри кавычек до первой точки
+                # lst_name_el = str_kav_dot(lst_el)
+                # if not (lst_name_el == ''):
+                #     for jn, el_seekn in enumerate(el_prog):
+                #         if jn>1:
+                #             lst_eln_seek = el_seekn.split('|', 1)[1]
+                #             if lst_eln_seek.find(lst_name_el)>-1:
+                #                 # найден дубль в jn для i
+                #                 lst_D1[k][i] = lst_D1[k][i].split("|")[0] + ', ' + lst_D1[k][j].split('|')[0] + '|' + lst_D1[k][i].split("|")[1]
+                #                 lst_del.append(jn)
+
                 # удаляем собранные дубликаты в обратном порядке
                 for n in reversed(lst_del):
                     del lst_D1[k][n]    
 
-                # собираем дубрикаты названий в ковычках
-                # сравнение внутри кавычек до первой точки
 
 
 
 
 
-
-                
 
     print('Собираем дубликаты программ - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
