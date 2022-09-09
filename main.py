@@ -189,7 +189,7 @@ def txt_to_list(path_prog):
     # заполняем справочник капслоков 
     for i, el in enumerate(str_txt_cpsl):
         if not (el[0] == '#' or el.strip()==''):
-            lst_CapsWord.append(el.replace('\n',''))
+            lst_CapsWord.append(el.replace('\n','').strip())
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
     try:
@@ -204,7 +204,7 @@ def txt_to_list(path_prog):
     # заполняем справочник капслоков 
     for i, el in enumerate(str_txt_stopw):
         if not (el[0] == '#' or el.strip()==''):
-            lst_StopWord.append(el.replace('\n',''))
+            lst_StopWord.append(el.replace('\n','').strip())
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
     print('Считываем настройки - ВЫПОЛНЕНО!')   
@@ -1463,7 +1463,7 @@ def replace_in_prog(str_prog):
             str_prog = str_prog.replace('..', '.')
 
         if str_prog.find('..')>-1: 
-            str_prog = str_prog.replace('..', '.')
+            str_prog = str_prog.replace('..', '')
 
         # if str_prog.find('(S)')>-1: 
         #     str_prog = str_prog.replace('(S)', ' ')
@@ -1527,18 +1527,22 @@ def replace_in_prog(str_prog):
 
 
         # синтезируем строку программы
+        fl_sintez = 0
         str_sintez = ''
         if not str_sub_repl == '':
             str_sintez =  str_sub_repl
+            fl_sintez += 1
       
 
         if not str_sub_name_prog == '':
             str_sintez = str_sintez + ' «' + str_sub_name_prog +'»'
+            fl_sintez += 1
 
         if str_sintez == '':
             str_sintez =  deCapsLock(str_prog)
         else:
-            str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+            if fl_sintez < 2:
+                str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
 
 
         # if not str_sintez.strip()[-1]=='.':
@@ -1562,6 +1566,9 @@ def replace_in_prog(str_prog):
     return Rezult
 
 
+# def remove_trash():
+#     print()
+
 
 
 # основное тело программы
@@ -1573,7 +1580,7 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>8 and datetime.date.today().day>12: 
+    if datetime.date.today().month>8 and datetime.date.today().day>15: 
         input('Закончился демо-режим программы, нажмите Enter для завершения.')
         exit()
 
