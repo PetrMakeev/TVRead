@@ -1160,6 +1160,15 @@ def replace_in_prog(str_prog):
     str_sub_repl = ''
     if not fl_stop:
 
+        # ищем и удаляем слова по списку удаления
+        str_sub_remove = ''
+        for i, el in enumerate(lst_Remove):
+            if el in str_prog:
+                pos_Rem = str_prog.upper().find(el.upper())
+                str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
+                str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
+
+
         # определяем замену вырезаем из строки
         # и сохраняем в переменной str_sub_repl
         for el in lst_Repl:
@@ -1431,14 +1440,6 @@ def replace_in_prog(str_prog):
             str_sub_rezh = str_prog[pos_ser_rech:]
             str_prog = str_prog[:pos_ser_rech-1]
 
-
-        # ищем и удаляем слова по списку удаления
-        str_sub_remove = ''
-        for i, el in enumerate(lst_Remove):
-            if el in str_prog:
-                pos_Rem = str_prog.upper().find(el.upper())
-                str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
-                str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
 
 
         # убираем  мусор: 
