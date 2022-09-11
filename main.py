@@ -384,7 +384,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -394,7 +394,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -404,7 +404,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -414,7 +414,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -424,7 +424,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -434,7 +434,7 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
@@ -444,12 +444,12 @@ def analiz_prog():
         for i, el_Pr in enumerate(el_D):
             if i>0:
                 # сохранение телепрограмм 
-               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + replace_in_prog(el_Pr.split('|', 1)[1])
+               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1])
 
     print('Анализ телепрограмм - ВЫПОЛНЕНО')
 
 
-# сохранение сведений о телепрограмме
+# сохранение сведений о телепрограмме 
 def save_prog(doc_, doc_N, el_Pr_, el_D_, i, str_prog_, str_prog_N):
     if i<1:
         if len(el_D_) > 1:
@@ -1125,7 +1125,7 @@ def del_dubl_prog():
     progressInt +=  1
 
 
-def replace_in_prog(str_prog):
+def analiz_in_prog(str_prog):
 
     # сканируем  в поиске возрастной категории
     str_sub_vozrast = ''
