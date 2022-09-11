@@ -1241,8 +1241,8 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 if str_sub_name_prog == '':
                     str_sub_name_prog = 'DEL'   # при синтезе удаляем
                 str_sub_repl = el[1]
-                # str_prog = str_prog[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
-                str_prog = str_prog[pos_repl + len(el[0]) :].strip()
+                str_prog = str_prog[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
+                # str_prog = str_prog[pos_repl + len(el[0]) :].strip()
                 break
             else:
                 str_sub_repl = ''
@@ -1305,7 +1305,10 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
         else:
             if fl_sintez < 2:
                 str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+    else:
+        str_sintez = deCapsLock(str_prog)
 
+        
 
     # добавляем возрастное ограничение
     if not str_sub_vozrast == '':
@@ -1313,6 +1316,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
 
     Rezult = str_sintez.strip()
+
 
 
 
