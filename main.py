@@ -198,20 +198,6 @@ def txt_to_list(path_prog):
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
 
-    # # справочник удалений с заменами Remove.txt
-    # try:
-    #     with open('Remove.txt', 'r') as file_r:
-    #         str_txt_rem = file_r.readlines()
-    # except:
-    #     # cправочник каналов Remove.txt недоступен
-    #     print('Не найден файл со списком удалений - Remove.txt!')
-    #     exit()
-
-    # for i, el in enumerate(str_txt_rem):
-    #     if not (el[0] == '#' or el.strip()==''):
-    #         lst_Remove.append(el.replace('\n','').strip())
-    #         print('Считываем настройки - ' + progressSpin(i), end='\r')      
-
 
     # справочник с исключениями CapsWord.txt
     try:
