@@ -1160,9 +1160,9 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                    name_Channel):           # название канала
 
     # определяем переменные для синтеза программы
-    str_sub_vozrast = ''    # возрастная категория, при синтезе ставится в конец строки
-    str_sub_repl = ''       # вид передачи, при синтезе ставится в начало строки 
-    str_sub_name_prog = ''  # название передачи в кавычках
+    str_sub_vozrast = ''         # возрастная категория, при синтезе ставится в конец строки
+    str_sub_repl = ''            # вид передачи, при синтезе ставится в начало строки 
+    str_sub_name_prog = ''       # название передачи в кавычках
 
 
     fl_stop_word = False         # флаг найденного стоп слова (строка не обрабатывается)
@@ -1170,7 +1170,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     fl_stop_serial = False       # флаг найденного сериала (строка обрабатывается по справочнику)
 
 
-    # сканируем  в поиске возрастной категории
+    # сканируем в поиске возрастной категории
     for j, el_v in enumerate(vozrast):
         if el_v in str_prog:
             str_sub_vozrast = vozrast[j]
@@ -1209,18 +1209,9 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 break
 
 
-    # # определяем наличие сериала
-    # if (not fl_stop_word) and (not fl_stop_AP):
-    #     for el in lst_Serial:
-    #         if str_prog.upper().find(el[0].upper()) > -1 :
-    #             str_sub_repl = 'Т/с'   # сериал (при синтезе НЕ удаляем)
-    #             str_sub_name_prog = el[1]
-    #             fl_stop_serial = True
-    #             break
 
-
-    # определяем замену вырезаем из строки
-    if (not fl_stop_word) and (not fl_stop_AP) and (not fl_stop_serial):
+    # определяем замену 
+    if (not fl_stop_word) and (not fl_stop_AP) :
         # и сохраняем в переменной str_sub_repl
         for el in lst_Repl:
             pos_repl = str_prog.upper().find(el[0].upper())
@@ -1251,7 +1242,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
             if ((pos1 > -1) and (pos2 > pos1)):
                 if str_sub_repl == '':
                     str_sub_repl = 'DEL'   # при синтезе удаляем
-                str_sub_name_prog = deCapsLock(str_prog[pos1+1:pos2])
+                str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
                 str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
             else:
                 str_sub_name_prog = ''
@@ -1261,7 +1252,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
 
 
-    if (not fl_stop_word) and (not fl_stop_AP) and (not fl_stop_serial):
+    if (not fl_stop_word) and (not fl_stop_AP) :
         # ищем и удаляем слова по списку удаления
         str_sub_remove = ''
         for i, el in enumerate(lst_Remove):
@@ -1284,7 +1275,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
         if not str_sub_name_prog == '':
             if not str_sub_name_prog == 'DEL':
-                str_sintez = str_sintez + ' «' + str_sub_name_prog +'»'
+                str_sintez = str_sintez + ' ' + str_sub_name_prog 
             fl_sintez += 1
 
         if str_sintez == '':
