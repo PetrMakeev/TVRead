@@ -14,7 +14,6 @@ lst_Remove = []
 lst_CapsWord = []
 lst_StopWord = []
 lst_Programma = []
-lst_Serial = []
 lst_txt = []
 divH = 2
 list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВЕРГ', 'ПЯТНИЦА', 'СУББОТА', 'ВОСКРЕСЕНЬЕ']
@@ -166,24 +165,7 @@ def txt_to_list(path_prog):
             rep1 = el.replace('\n','').split('|')[1].strip()
             lst_Programma.append([rep0, rep1])
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
-
-
-    # Справочник с сериалами Serial.txt
-    try:
-        with open('Serial.txt', 'r') as file_r:
-            str_serial = file_r.readlines()
-    except:
-        # cправочник каналов Serial.txt недоступен
-        print('Не найден файл с программами - Serial.txt!')
-        exit()
-
-    # заполняем справочник замен 
-    for i, el in enumerate(str_serial):
-        if not (el[0] == '#' or el.strip()==''):
-            rep0 = el.split('|')[0].strip()
-            rep1 = el.replace('\n','').split('|')[1].strip()
-            lst_Serial.append([rep0, rep1])
-            print('Считываем настройки - ' + progressSpin(i), end='\r')      
+  
 
 
     # Справочник с заменами Replace.txt
@@ -1222,14 +1204,14 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 break
 
 
-    # определяем наличие сериала
-    if (not fl_stop_word) and (not fl_stop_AP):
-        for el in lst_Serial:
-            if str_prog.upper().find(el[0].upper()) > -1 :
-                str_sub_repl = 'Т/с'   # сериал (при синтезе НЕ удаляем)
-                str_sub_name_prog = el[1]
-                fl_stop_serial = True
-                break
+    # # определяем наличие сериала
+    # if (not fl_stop_word) and (not fl_stop_AP):
+    #     for el in lst_Serial:
+    #         if str_prog.upper().find(el[0].upper()) > -1 :
+    #             str_sub_repl = 'Т/с'   # сериал (при синтезе НЕ удаляем)
+    #             str_sub_name_prog = el[1]
+    #             fl_stop_serial = True
+    #             break
 
 
     # определяем замену вырезаем из строки
