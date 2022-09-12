@@ -10,7 +10,7 @@ from docx.shared import Mm
 
 lst_Ch = []
 lst_Repl = []
-#lst_Remove = []
+lst_Remove = []
 lst_CapsWord = []
 lst_StopWord = []
 lst_Programma = []
@@ -197,6 +197,20 @@ def txt_to_list(path_prog):
             lst_Repl.append([rep0, rep1, rep2])
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
+
+    # справочник удалений с заменами Remove.txt
+    try:
+        with open('Remove.txt', 'r') as file_r:
+            str_txt_rem = file_r.readlines()
+    except:
+        # cправочник каналов Remove.txt недоступен
+        print('Не найден файл со списком удалений - Remove.txt!')
+        exit()
+
+    for i, el in enumerate(str_txt_rem):
+        if not (el[0] == '#' or el.strip()==''):
+            lst_Remove.append(el.replace('\n','').strip())
+            print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
 
     # справочник с исключениями CapsWord.txt
@@ -1157,7 +1171,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
     fl_stop_word = False         # флаг найденного стоп слова (строка не обрабатывается)
     fl_stop_AP = False           # флаг найденной авторской программы (строка обрабатывается по справочнику)
-
+    fl_stop_Repl = False         # флаг найденной замены
 
 
     # сканируем в поиске возрастной категории
@@ -1201,7 +1215,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
 
     # определяем замену 
-    if (not fl_stop_word) and (not fl_stop_AP) :
+    if (not fl_stop_word)  :
         # и сохраняем в переменной str_sub_repl
         for el in lst_Repl:
             pos_repl = str_prog.upper().find(el[0].upper())
@@ -1210,7 +1224,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                     str_sub_name_prog = 'DEL'   # при синтезе удаляем
                 str_sub_repl = el[1]
                 str_prog = str_prog[:pos_repl].strip() + ' ' + str_prog[pos_repl + len(el[0]) :].strip()
-                # str_prog = str_prog[pos_repl + len(el[0]) :].strip()
+                fl_stop_Repl = True
                 break
             else:
                 str_sub_repl = ''
@@ -1242,16 +1256,6 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
 
 
-    # if (not fl_stop_word) and (not fl_stop_AP) :
-    #     # ищем и удаляем слова по списку удаления
-    #     str_sub_remove = ''
-    #     for i, el in enumerate(lst_Remove):
-    #         if el in str_prog:
-    #             pos_Rem = str_prog.upper().find(el.upper())
-    #             str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
-    #             str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
-
-
      
     if not fl_stop_word:
         # синтезируем строку программы
@@ -1272,18 +1276,34 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
             str_sintez =  deCapsLock(str_prog)
         else:
             if fl_sintez < 2:
-                str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+                if fl_stop_AP:
+                    str_sintez = str_sintez
+                else:
+                    str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
     else:
         str_sintez = deCapsLock(str_prog)
 
-        
+
+    # удаляем по справочнику     
+    if (not fl_stop_word) and (not fl_stop_AP) :
+        # ищем и удаляем слова по списку удаления
+        str_sub_remove = ''
+        for i, el in enumerate(lst_Remove):
+            if el in str_sintez:
+                pos_Rem = str_sintez.upper().find(el.upper())
+                str_sintez = str_sintez[:pos_Rem] + ' ' + str_sintez[pos_Rem + len(el):]
+
+
+    str_sintez = str_sintez.strip()
 
     # добавляем возрастное ограничение
     if not str_sub_vozrast == '':
         str_sintez = str_sintez + ' ^' + str_sub_vozrast
 
 
-    Rezult = str_sintez.strip()
+
+
+    Rezult = str_sintez
 
 
 
