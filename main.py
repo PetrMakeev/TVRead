@@ -141,7 +141,7 @@ def txt_to_list(path_prog):
         # cправочник каналов Channel.txt недоступен
         print('Не найден файл со списком каналов - Channel.txt!')
         exit()
-
+    
     # заполняем справочник каналов 
     for i, el in enumerate(str_txt_ch):
         if not (el[0] == '#' or el.strip()==''):
@@ -177,12 +177,17 @@ def txt_to_list(path_prog):
         print('Не найден файл со списком замен - Replace.txt!')
         exit()
 
+    # сбрасываем текущий канал
+    currCH = ''
     # заполняем справочник замен 
     for i, el in enumerate(str_txt_rpl):
-        if not (el[0] == '#' or el.strip()==''):
+        if not (el[0] == '#' or el.replace('\n','').strip()==''):
+            if el.split('|')[0] == 'CH':
+                currCH = el.replace('\n','').split('|')[1].strip()
+                continue
             rep0 = el.split('|')[0].strip()
             rep1 = el.split('|')[1].strip()
-            rep2 = el.replace('\n','').split('|')[2].strip()
+            rep2 = currCH
             lst_Repl.append([rep0, rep1, rep2])
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
