@@ -10,7 +10,7 @@ from docx.shared import Mm
 
 lst_Ch = []
 lst_Repl = []
-lst_Remove = []
+#lst_Remove = []
 lst_CapsWord = []
 lst_StopWord = []
 lst_Programma = []
@@ -158,12 +158,18 @@ def txt_to_list(path_prog):
         print('Не найден файл с программами - Programma.txt!')
         exit()
 
+    # сбрасываем текущий канал
+    currCH = ''
     # заполняем справочник программ 
     for i, el in enumerate(str_programma):
-        if not (el[0] == '#' or el.strip()==''):
+        if not (el[0] == '#' or el.replace('\n','').strip()==''):
+            if el.split('|')[0] == 'CH':
+                currCH = el.replace('\n','').split('|')[1].strip()
+                continue
             rep0 = el.split('|')[0].strip()
             rep1 = el.replace('\n','').split('|')[1].strip()
-            lst_Programma.append([rep0, rep1])
+            rep2 = currCH
+            lst_Programma.append([rep0, rep1, rep2])
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
   
 
@@ -192,19 +198,19 @@ def txt_to_list(path_prog):
             print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
 
-    # справочник удалений с заменами Remove.txt
-    try:
-        with open('Remove.txt', 'r') as file_r:
-            str_txt_rem = file_r.readlines()
-    except:
-        # cправочник каналов Remove.txt недоступен
-        print('Не найден файл со списком удалений - Remove.txt!')
-        exit()
+    # # справочник удалений с заменами Remove.txt
+    # try:
+    #     with open('Remove.txt', 'r') as file_r:
+    #         str_txt_rem = file_r.readlines()
+    # except:
+    #     # cправочник каналов Remove.txt недоступен
+    #     print('Не найден файл со списком удалений - Remove.txt!')
+    #     exit()
 
-    for i, el in enumerate(str_txt_rem):
-        if not (el[0] == '#' or el.strip()==''):
-            lst_Remove.append(el.replace('\n','').strip())
-            print('Считываем настройки - ' + progressSpin(i), end='\r')      
+    # for i, el in enumerate(str_txt_rem):
+    #     if not (el[0] == '#' or el.strip()==''):
+    #         lst_Remove.append(el.replace('\n','').strip())
+    #         print('Считываем настройки - ' + progressSpin(i), end='\r')      
 
 
     # справочник с исключениями CapsWord.txt
@@ -981,15 +987,7 @@ def deCapsLock(str_dcl):
     return str_dcl
 
 
-# делаем анализ строки программы 
-# проводим замены и синтезируем строку 
-# str_sub_repl - строка замены 
-# str_sub_vozrast - строка возрастное ограничение
-# str_sub_name_prog - строка программы внутри кавычек елочкой
-# str_sub_ser - строка с сериями
-# str_sub_sez - строка с сезонами 
-# str_sub_rol - строка в ролях 
-# str_sub_rezh - строка режиссер
+
 
 def del_dubl_prog():
     progressInt = 0
@@ -1156,6 +1154,12 @@ def del_dubl_prog():
     progressInt +=  1
 
 
+# делаем анализ строки программы 
+# проводим замены и синтезируем строку 
+# str_sub_repl - строка замены 
+# str_sub_vozrast - строка возрастное ограничение
+# str_sub_name_prog - строка программы внутри кавычек елочкой
+
 def analiz_in_prog(str_prog,                # анализируемая строка
                    name_Channel):           # название канала
 
@@ -1167,7 +1171,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
     fl_stop_word = False         # флаг найденного стоп слова (строка не обрабатывается)
     fl_stop_AP = False           # флаг найденной авторской программы (строка обрабатывается по справочнику)
-    fl_stop_serial = False       # флаг найденного сериала (строка обрабатывается по справочнику)
+
 
 
     # сканируем в поиске возрастной категории
@@ -1202,7 +1206,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     # определяем наличие авторской программы 
     if not fl_stop_word:
         for el in lst_Programma:
-            if str_prog.upper().find(el[0].upper()) > -1 :
+            if str_prog.upper().find(el[0].upper()) > -1 and name_Channel==el[2]:
                 str_sub_repl = 'DEL'   # авторская программа (при синтезе удаляем)
                 str_sub_name_prog = el[1]
                 fl_stop_AP = True
@@ -1230,7 +1234,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
     # Название программы в кавычках
     # и вырезаем строку внутри кавычек ёлочек
-    if (not fl_stop_word) and (not fl_stop_AP) and (not fl_stop_serial):
+    if (not fl_stop_word) and (not fl_stop_AP) :
         pos1 = str_prog.find('«')
         pos2 = str_prog.rfind('»')
 
@@ -1252,14 +1256,14 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
 
 
-    if (not fl_stop_word) and (not fl_stop_AP) :
-        # ищем и удаляем слова по списку удаления
-        str_sub_remove = ''
-        for i, el in enumerate(lst_Remove):
-            if el in str_prog:
-                pos_Rem = str_prog.upper().find(el.upper())
-                str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
-                str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
+    # if (not fl_stop_word) and (not fl_stop_AP) :
+    #     # ищем и удаляем слова по списку удаления
+    #     str_sub_remove = ''
+    #     for i, el in enumerate(lst_Remove):
+    #         if el in str_prog:
+    #             pos_Rem = str_prog.upper().find(el.upper())
+    #             str_sub_remove = str_prog[pos_Rem: pos_Rem + len(el)]
+    #             str_prog = str_prog[:pos_Rem] + ' ' + str_prog[pos_Rem + len(el):]
 
 
      
