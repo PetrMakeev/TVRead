@@ -935,17 +935,11 @@ def deCapsLock(str_dcl):
         #проверяем исключения по Капслоку
         for el_cpsl in lst_CapsWord:
             pos_cpsl = el.upper().find(el_cpsl.upper())
-            if pos_cpsl>-1:
-                if pos_cpsl==0:
-                    if len(tmp_str.strip())>0:
-                        tmp_str = tmp_str + ' ' + el_cpsl + el[len(el_cpsl):]    
-                    else:
-                        tmp_str = el_cpsl
+            if el.upper() == el_cpsl.upper():   # pos_cpsl>-1:
+                if len(tmp_str.strip())>0:
+                    tmp_str = tmp_str + ' ' + el_cpsl  
                 else:
-                    if len(tmp_str.strip())>0:
-                        tmp_str = tmp_str + ' ' + el_cpsl + el[len(el_cpsl)+pos_cpsl:]   
-                    else:
-                        tmp_str = el[:pos_cpsl] + el_cpsl + el[len(el_cpsl)+pos_cpsl:]
+                    tmp_str = el_cpsl
                 fl_CapsWord = True
                 break
             else:
