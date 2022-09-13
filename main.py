@@ -1279,7 +1279,10 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 if fl_stop_AP:
                     str_sintez = str_sintez
                 else:
-                    str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+                    if name_Channel.upper() == 'СПАС':  # в СПАСе названия фильмов без кавычек
+                        str_sintez = str_sintez + ' «' + deCapsLock(str_prog) + '»'
+                    else:
+                        str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
     else:
         str_sintez = deCapsLock(str_prog)
 
