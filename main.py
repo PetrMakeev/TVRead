@@ -1173,6 +1173,17 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     fl_stop_AP = False           # флаг найденной авторской программы (строка обрабатывается по справочнику)
     fl_stop_Repl = False         # флаг найденной замены
 
+    #ищем и удаляем предварительно киностудии ленфильм мосфильм
+    nameFilm = '"ЛЕНФИЛЬМ"'
+    posFilm = str_prog.upper().find(nameFilm)
+    if posFilm > -1:
+        str_prog = str_prog[:posFilm] + ' ' + str_prog[posFilm + len(nameFilm) :]
+        
+    nameFilm = '"МОСФИЛЬМ"'
+    posFilm = str_prog.upper().find(nameFilm)
+    if posFilm > -1:
+        str_prog = str_prog[:posFilm] + ' ' + str_prog[posFilm + len(nameFilm) :]
+ 
 
     # сканируем в поиске возрастной категории
     for j, el_v in enumerate(vozrast):
