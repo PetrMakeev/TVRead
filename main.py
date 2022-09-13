@@ -1206,7 +1206,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     # определяем наличие авторской программы 
     if not fl_stop_word:
         for el in lst_Programma:
-            if str_prog.upper().find(el[0].upper()) > -1 and name_Channel==el[2]:
+            if str_prog.upper().find(el[0].upper()) > -1 and name_Channel.upper()==el[2].upper():
                 str_sub_repl = 'DEL'   # авторская программа (при синтезе удаляем)
                 str_sub_name_prog = el[1]
                 fl_stop_AP = True
@@ -1219,7 +1219,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
         # и сохраняем в переменной str_sub_repl
         for el in lst_Repl:
             pos_repl = str_prog.upper().find(el[0].upper())
-            if str_prog.upper().find(el[0].upper()) > -1 and name_Channel==el[2]:
+            if str_prog.upper().find(el[0].upper()) > -1 and name_Channel.upper()==el[2].upper():
                 if str_sub_name_prog == '':
                     str_sub_name_prog = 'DEL'   # при синтезе удаляем
                 str_sub_repl = el[1]
