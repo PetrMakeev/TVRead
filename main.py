@@ -912,6 +912,24 @@ def exp_prog(path_prog):
 
 # проверяем и делаем деКапсЛок
 def deCapsLock(str_dcl):
+
+    # ищем оставшиеся апострофы и меняем на елочки
+    fl_search = True
+    for pos_ap, sub_ap in enumerate(str_dcl):
+        if sub_ap == '"':
+            if pos_ap==0:
+                str_dcl = '«' + str_dcl[1:]   
+            elif pos_ap>0 and pos_ap<len(str_dcl)-1:
+                if str_dcl[pos_ap+1] == ' ':
+                    str_dcl = str_dcl[:pos_ap] + '»' + str_dcl[pos_ap+1:]  
+                else:
+                    str_dcl = str_dcl[:pos_ap] + '«' + str_dcl[pos_ap+1:] 
+            elif pos_ap == len(str_dcl)-1:
+                str_dcl = str_dcl[:-1] + '»'
+            
+
+        
+
     str_dcl = str_dcl.strip()
     fl_caps = True
     fl_CapsWord = False
