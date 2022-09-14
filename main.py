@@ -1257,7 +1257,13 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 str_sub_name_prog = ''
 
         else:
-            str_sub_name_prog = ''
+            if ((pos1 > -1) and (pos2 > pos1)):
+                if str_sub_repl == '':
+                    str_sub_repl = 'DEL'   # при синтезе удаляем
+                str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
+                str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
+            else:
+                str_sub_name_prog = ''
 
 
 
