@@ -1358,7 +1358,7 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>8 and datetime.date.today().day>15: 
+    if datetime.date.today().month>8 and datetime.date.today().day>20: 
         input('Закончился демо-режим программы, нажмите Enter для завершения.')
         exit()
 
