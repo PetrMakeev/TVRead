@@ -22,6 +22,10 @@ list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВ
 vozrast = []
 for i in range(0,20):
     vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
+vozrast1 = []
+for i in range(0,20):
+    vozrast1.extend([' ' + str(i) + '+', '[' + str(i) + '+'])
+
 
 god_film = []
 for i in range(1900,2050):
@@ -1197,25 +1201,46 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     if posFilm > -1:
         str_prog = str_prog[:posFilm] + ' ' + str_prog[posFilm + len(nameFilm) :]
 
-
+    find_v = False
+    find_v1 = False
     # сканируем в поиске возрастной категории
     for j, el_v in enumerate(vozrast):
         if el_v in str_prog:
             str_sub_vozrast = vozrast[j]
+            find_v = True
             break
+    if not find_v:
+        for j, el_v in enumerate(vozrast1):
+            if el_v in str_prog:
+                str_sub_vozrast = vozrast1[j]
+                find_v1 = True
+                break
+            
     # вырезаем из строки 
     # и сохраняем возрастной индекс str_sub_vozrast
     repl_vozr_sub = ''
     if not str_sub_vozrast=='':
-        if str_sub_vozrast[0] == '(':
-            repl_vozr_sub = str_sub_vozrast + ')'
-        else:
-            repl_vozr_sub = str_sub_vozrast
-        if not repl_vozr_sub=='':
-            str_prog = str_prog.replace(repl_vozr_sub, '')
-            str_sub_vozrast = str_sub_vozrast.replace('(', ' ').strip()
-        else:
-            str_sub_vozrast = ''
+        if find_v:
+            if str_sub_vozrast[0] == '(':
+                repl_vozr_sub = str_sub_vozrast
+            if not repl_vozr_sub=='':
+                str_prog = str_prog.replace(repl_vozr_sub, '')
+                str_sub_vozrast = str_sub_vozrast.replace('(', ' ').strip()
+            else:
+                str_sub_vozrast = ''
+
+
+        if find_v1:
+            if str_sub_vozrast[0] == '[':
+                repl_vozr_sub = '[' + str_sub_vozrast[1:] + ']'
+            # else:
+            #     repl_vozr_sub = str_sub_vozrast
+            if not repl_vozr_sub=='':
+                str_prog = str_prog.replace(repl_vozr_sub, '')
+                str_sub_vozrast = str_sub_vozrast.replace('[', ' ').strip()
+            else:
+                str_sub_vozrast = ''
+        
 
 
     # определяем наличие стоп слова в строке
@@ -1356,7 +1381,7 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>8 and datetime.date.today().day>20:
+    if datetime.date.today().month>10 and datetime.date.today().day>20:
         input('Закончился демо-режим программы, нажмите Enter для завершения.')
         exit()
 
