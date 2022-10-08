@@ -1222,9 +1222,9 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
     if not str_sub_vozrast=='':
         if find_v:
             if str_sub_vozrast[0] == '(':
-                repl_vozr_sub = str_sub_vozrast
+                repl_vozr_sub = str_sub_vozrast + ')'
             if not repl_vozr_sub=='':
-                str_prog = str_prog.replace(repl_vozr_sub, '')
+                str_prog = str_prog.replace(repl_vozr_sub, '').strip()
                 str_sub_vozrast = str_sub_vozrast.replace('(', ' ').strip()
             else:
                 str_sub_vozrast = ''
@@ -1232,11 +1232,11 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
 
         if find_v1:
             if str_sub_vozrast[0] == '[':
-                repl_vozr_sub = '[' + str_sub_vozrast[1:] + ']'
+                repl_vozr_sub = str_sub_vozrast + ']'
             # else:
             #     repl_vozr_sub = str_sub_vozrast
             if not repl_vozr_sub=='':
-                str_prog = str_prog.replace(repl_vozr_sub, '')
+                str_prog = str_prog.replace(repl_vozr_sub, '').strip()
                 str_sub_vozrast = str_sub_vozrast.replace('[', ' ').strip()
             else:
                 str_sub_vozrast = ''
