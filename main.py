@@ -21,10 +21,13 @@ list_week = ['ПОНЕДЕЛЬНИК', 'ВТОРНИК', 'СРЕДА', 'ЧЕТВ
 
 vozrast = []
 for i in range(0,20):
-    vozrast.extend([' ' + str(i) + '+', '(' + str(i) + '+'])
+    vozrast.extend(['(' + str(i) + '+)'])
 vozrast1 = []
 for i in range(0,20):
-    vozrast1.extend([' ' + str(i) + '+', '[' + str(i) + '+'])
+    vozrast1.extend(['[' + str(i) + '+]'])
+vozrast2 = []
+for i in range(0,20):
+    vozrast2.extend([' ' + str(i) + '+'])
 
 
 god_film = []
@@ -1194,6 +1197,7 @@ def analiz_prog_day_in(str_prog,                # анализируемая с�
 
     find_v = False
     find_v1 = False
+    find_v2 = False
     # сканируем в поиске возрастной категории
     for j, el_v in enumerate(vozrast):
         if el_v in str_prog:
@@ -1206,31 +1210,30 @@ def analiz_prog_day_in(str_prog,                # анализируемая с�
                 str_sub_vozrast = vozrast1[j]
                 find_v1 = True
                 break
+    if not find_v1 and not find_v:
+        for j, el_v in enumerate(vozrast2):
+            if el_v in str_prog:
+                str_sub_vozrast = vozrast2[j]
+                find_v2 = True
+                break
+
             
     # вырезаем из строки 
     # и сохраняем возрастной индекс str_sub_vozrast
-    repl_vozr_sub = ''
     if not str_sub_vozrast=='':
-        if find_v:
-            if str_sub_vozrast[0] == '(':
-                repl_vozr_sub = str_sub_vozrast + ')'
-            if not repl_vozr_sub=='':
-                str_prog = str_prog.replace(repl_vozr_sub, '').strip()
-                str_sub_vozrast = str_sub_vozrast.replace('(', ' ').strip()
-            else:
-                str_sub_vozrast = ''
+        if find_v2:
+            str_prog = str_prog.replace(str_sub_vozrast, '').strip()
+            str_sub_vozrast = str_sub_vozrast.replace(' ', '').strip()
+
+        if find_v1 and not find_v2:
+            str_prog = str_prog.replace(str_sub_vozrast, '').strip()
+            str_sub_vozrast = str_sub_vozrast.replace('[', ' ').replace(']', '').strip()
+
+        if find_v and not find_v1:
+            str_prog = str_prog.replace(str_sub_vozrast, '').strip()
+            str_sub_vozrast = str_sub_vozrast.replace('(', '').replace(')', '').strip()
 
 
-        if find_v1:
-            if str_sub_vozrast[0] == '[':
-                repl_vozr_sub = str_sub_vozrast + ']'
-            # else:
-            #     repl_vozr_sub = str_sub_vozrast
-            if not repl_vozr_sub=='':
-                str_prog = str_prog.replace(repl_vozr_sub, '').strip()
-                str_sub_vozrast = str_sub_vozrast.replace('[', ' ').strip()
-            else:
-                str_sub_vozrast = ''
         
 
 
@@ -1361,7 +1364,7 @@ def analiz_prog_day_in(str_prog,                # анализируемая с�
                 str_sintez = str_sintez[:pos_Rem] + ' ' + str_sintez[pos_Rem + len(el):]
 
 
-    str_sintez = str_sintez.replace(' .', '.').strip()
+    str_sintez = str_sintez.replace(' .', '.').replace(' .', '.').strip()
 
     # добавляем возрастное ограничение
     if not str_sub_vozrast == '':
