@@ -416,77 +416,67 @@ def txt_to_prog(path_prog):
     print('Загружаем телепрограммы - ВЫПОЛНЕНО!')
 
 
+def analiz_prog_day(lst_day):
+
+    progressInt = 0
+    fl_Caps = False
+
+    # перебираем программы 
+    for l, el_D in enumerate(lst_day):
+        # определяем нужна обработка Капса или нет
+        for ll, el_ch in enumerate(lst_Ch):
+            if el_D[0] == el_ch[1]:
+                fl_Caps = (el_ch[3]) == '1'
+                break
+        for i, el_Pr in enumerate(el_D):
+            if i>0:
+                # сохранение телепрограмм 
+               lst_day[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_prog_day_in(el_Pr.split('|', 1)[1], el_D[0], fl_Caps)
+
+    print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
+    progressInt +=  1
+
+    return lst_day
+
 # перебираем списки программ для вызова анализа
 def analiz_prog():
 
     progressInt = 0
+    fl_Caps = False
 
-    # перебираем программы Понедельника
-    for l, el_D in enumerate(lst_D1):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D1[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
+    global lst_D1
+    global lst_D2
+    global lst_D3
+    global lst_D4
+    global lst_D5
+    global lst_D6
+    global lst_D7
 
+    lst_D1 = analiz_prog_day(lst_D1)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Вторника
-    for l, el_D in enumerate(lst_D2):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D2[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
-
+    lst_D2 = analiz_prog_day(lst_D2)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Среды
-    for l, el_D in enumerate(lst_D3):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D3[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
-
+    lst_D3 = analiz_prog_day(lst_D3)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Четверга
-    for l, el_D in enumerate(lst_D4):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D4[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
-
+    lst_D4 = analiz_prog_day(lst_D4)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Пятницы
-    for l, el_D in enumerate(lst_D5):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D5[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
-
+    lst_D5 = analiz_prog_day(lst_D5)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Субботы
-    for l, el_D in enumerate(lst_D6):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D6[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
-
+    lst_D6 = analiz_prog_day(lst_D6)
     print('Анализ телепрограмм - ' + progressSpin(progressInt) , end='\r')
     progressInt +=  1
 
-    # перебираем программы Вторника
-    for l, el_D in enumerate(lst_D7):
-        for i, el_Pr in enumerate(el_D):
-            if i>0:
-                # сохранение телепрограмм 
-               lst_D7[l][i] = el_Pr.split('|', 1)[0] + '|' + analiz_in_prog(el_Pr.split('|', 1)[1], el_D[0])
+    lst_D7 = analiz_prog_day(lst_D7)
 
     print('Анализ телепрограмм - ВЫПОЛНЕНО')
 
@@ -1177,8 +1167,9 @@ def del_dubl_prog():
 # str_sub_vozrast - строка возрастное ограничение
 # str_sub_name_prog - строка программы внутри кавычек елочкой
 
-def analiz_in_prog(str_prog,                # анализируемая строка
-                   name_Channel):           # название канала
+def analiz_prog_day_in(str_prog,                # анализируемая строка
+                       name_Channel,            # название канала
+                       fl_Caps):                # обработка Капса 
 
     # определяем переменные для синтеза программы
     str_sub_vozrast = ''         # возрастная категория, при синтезе ставится в конец строки
@@ -1295,7 +1286,10 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
             if ((pos1 > -1) and (pos2 > pos1)):
                 if str_sub_repl == '':
                     str_sub_repl = 'DEL'   # при синтезе удаляем
-                str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
+                if fl_Caps:
+                    str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
+                else:
+                    str_sub_name_prog = '«' + str_prog[pos1+1:pos2] + '»'
                 str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
             else:
                 str_sub_name_prog = ''
@@ -1304,7 +1298,10 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
             if ((pos1 > -1) and (pos2 > pos1)):
                 if str_sub_repl == '':
                     str_sub_repl = 'DEL'   # при синтезе удаляем
-                str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
+                if fl_Caps:
+                    str_sub_name_prog = '«' + deCapsLock(str_prog[pos1+1:pos2]) + '»'
+                else:
+                    str_sub_name_prog = '«' + str_prog[pos1+1:pos2] + '»'
                 str_prog = str_prog[:pos1] + ' ' + str_prog[pos2+1:]
             else:
                 str_sub_name_prog = ''
@@ -1328,18 +1325,30 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
             fl_sintez += 1
 
         if str_sintez == '':
-            str_sintez =  deCapsLock(str_prog)
+            if fl_Caps:
+                str_sintez =  deCapsLock(str_prog)
+            else:
+                str_sintez =  str_prog
         else:
             if fl_sintez < 2:
                 if fl_stop_AP:
                     str_sintez = str_sintez
                 else:
                     if name_Channel.upper() == 'СПАС':  # в СПАСе названия фильмов без кавычек
-                        str_sintez = str_sintez + ' «' + deCapsLock(str_prog) + '»'
+                        if fl_Caps:
+                            str_sintez = str_sintez + ' «' + deCapsLock(str_prog) + '»'
+                        else:
+                            str_sintez = str_sintez + ' «' + str_prog + '»'
                     else:
-                        str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+                        if fl_Caps:
+                            str_sintez = str_sintez + ' ' + deCapsLock(str_prog)
+                        else:
+                            str_sintez = str_sintez + ' ' + str_prog
     else:
-        str_sintez = deCapsLock(str_prog)
+        if fl_Caps:
+            str_sintez = deCapsLock(str_prog)
+        else:
+            str_sintez = str_prog
 
 
     # удаляем по справочнику
@@ -1352,7 +1361,7 @@ def analiz_in_prog(str_prog,                # анализируемая стр�
                 str_sintez = str_sintez[:pos_Rem] + ' ' + str_sintez[pos_Rem + len(el):]
 
 
-    str_sintez = str_sintez.strip()
+    str_sintez = str_sintez.replace(' .', '.').strip()
 
     # добавляем возрастное ограничение
     if not str_sub_vozrast == '':
