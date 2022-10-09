@@ -34,7 +34,7 @@ god_film = []
 for i in range(1900,2050):
     god_film.append(str(i))
 
-
+# инициализируем документы для сохранения
 doc1 = Document()
 doc2 = Document()
 doc3 = Document()
