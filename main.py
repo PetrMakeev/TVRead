@@ -8,7 +8,7 @@ from docx.shared import Pt
 from docx.shared import Mm
 import platform
 
-
+# инициализируем списки
 lst_Ch = []
 lst_Repl = []
 lst_Remove = []
