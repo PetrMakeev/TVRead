@@ -97,7 +97,6 @@ def str_kav_dot(str_prog):
 
 
 
-
 # поправка на часовой пояс
 def timeDiv(strTime, fl_change):
     if fl_change:
