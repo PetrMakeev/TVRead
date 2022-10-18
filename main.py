@@ -65,11 +65,15 @@ def fl_to_name_Ch(name_Ch_id):
 
 # отрисовка прогресс спИна
 def progressSpin(i):
-    tmp_i = i%4
-    if tmp_i == 0: tmp_s='-'
-    if tmp_i == 1: tmp_s='\\'
-    if tmp_i == 2: tmp_s='|'
-    if tmp_i == 3: tmp_s='/'
+    tmp_i = i % 4
+    if tmp_i == 0:
+        tmp_s = '-'
+    if tmp_i == 1:
+        tmp_s = '\\'
+    if tmp_i == 2:
+        tmp_s =' |'
+    if tmp_i == 3:
+        tmp_s = '/'
     return tmp_s
 
 #подготовка экрана
@@ -1407,7 +1411,7 @@ def main():
         path_prog_out = path_prog + '/out/'
         path_prog = path_prog + '/'
     else:
-        input('Не определена операционная система! Нажмите любую клавишу.', btn_exit)
+        input('Не определена операционная система! Нажмите любую клавишу.')
         exit()
 
 
