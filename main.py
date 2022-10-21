@@ -1396,9 +1396,9 @@ def main():
 
 
     # проверяем дату
-    if datetime.date.today().month>10 and datetime.date.today().day>20:
-        input('Закончился демо-режим программы, нажмите Enter для завершения.')
-        exit()
+    # if datetime.date.today().month>10 and datetime.date.today().day>20:
+    #     input('Закончился демо-режим программы, нажмите Enter для завершения.')
+    #     exit()
 
     # определяем окружение
     path_prog = os.getcwd()
