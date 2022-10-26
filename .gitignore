@@ -79,5 +79,6 @@ dist/main/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_svrl_for_xsl
 dist/main/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/readme.txt
 __pycache__/*
 env/*
+.venv311/*
 /.idea/encodings.xml
 /.idea/vcs.xml
