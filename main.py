@@ -1,12 +1,13 @@
-import datetime
-from gettext import find
-from operator import truediv
-import os
-from time import strptime
+#import datetime
+#from gettext import find
+#from operator import truediv
+
+#from time import strptime
 from docx import Document
 from docx.shared import Pt
 from docx.shared import Mm
 import platform
+import os
 
 # инициализируем списки
 lst_Ch = []
