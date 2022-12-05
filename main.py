@@ -341,8 +341,8 @@ def txt_to_prog(path_prog):
                 if len(str_sub_lineD)>0:
                     str_sub_lineD = str_tmp.split(' ',1)
 
-                    # если начинается строка с буквы или кавычки
-                    if str_sub_lineD[0][0].isalpha() or str_sub_lineD[0][0] == '"'  or str_sub_lineD[0][0] == '«'  or name_Pr=='None' :
+                    # если начинается строка с буквы или кавычки или скобки
+                    if str_sub_lineD[0][0].isalpha() or str_sub_lineD[0][0] == '"' or str_sub_lineD[0][0] == '('  or str_sub_lineD[0][0] == '«'  or name_Pr=='None' :
                         if fl_merge:
                             fl_merge2 = True
                         fl_merge = True

@@ -82,3 +82,4 @@ env/*
 .venv311/*
 /.idea/encodings.xml
 /.idea/vcs.xml
+build/main/localpycs/pyimod04_pywin32.pyc
